@@ -9,7 +9,7 @@ public class GameUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_ui);
-
+        //hey, this is me!
         //hello, this is a test from Thong.
         //another test string
         //Charlie, Testing
