@@ -24,23 +24,26 @@
         android:layout_width="139dp"
         android:layout_height="48dp"
         android:text="Play"
-        tools:layout_editor_absoluteX="123dp"
-        tools:layout_editor_absoluteY="231dp" />
+        tools:layout_editor_absoluteY="231dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
         android:id="@+id/instruction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Instruction"
-        tools:layout_editor_absoluteX="39dp"
-        tools:layout_editor_absoluteY="327dp" />
+        tools:layout_editor_absoluteY="372dp"
+        app:layout_constraintRight_toLeftOf="@+id/leaderboard"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
         android:id="@+id/leaderboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Leader Board"
-        tools:layout_editor_absoluteX="227dp"
-        tools:layout_editor_absoluteY="327dp" />
+        tools:layout_editor_absoluteY="372dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/instruction" />
 
 </android.support.constraint.ConstraintLayout>
