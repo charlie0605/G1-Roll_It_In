@@ -11,5 +11,6 @@ public class GameUI extends AppCompatActivity {
         setContentView(R.layout.activity_game_ui);
 
         //hello, this is a test from Thong.
+        //another test string
     }
 }
