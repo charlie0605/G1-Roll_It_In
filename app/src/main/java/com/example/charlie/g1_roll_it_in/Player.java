@@ -42,7 +42,7 @@ public class Player {
     //high score
     /*private SharedPreferences gamePrefs;
     public static final String GAME_PREFS="Score";*/
-    private void setHighScore(int score){
+    public void setHighScore(int score){
         //set high score
         //display high score
         if(score>=0){
