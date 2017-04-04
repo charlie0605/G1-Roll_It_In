@@ -6,7 +6,6 @@ package com.example.charlie.g1_roll_it_in;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import android.content.SharedPreferences;
