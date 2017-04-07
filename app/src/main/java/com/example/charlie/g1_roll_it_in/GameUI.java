@@ -10,7 +10,8 @@ public class GameUI extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.menu);
+        setContentView(new MyView(this));
+//        setContentView(R.layout.menu);
         //hey, this is me!
         //hello, this is a test from Thong.
         //another test string
