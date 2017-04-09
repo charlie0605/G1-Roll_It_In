@@ -1,5 +1,6 @@
 package com.example.charlie.g1_roll_it_in;
 
+import android.graphics.Canvas;
 import java.util.ArrayList;
 
 /**
@@ -9,12 +10,14 @@ import java.util.ArrayList;
 public abstract class GameObject {
     protected int x, y;
     protected float speedX, speedY;
-
+    protected int screenWidth, screenHeight;
 
     //constructor-----------------------------------------------------------------------------------
-    public GameObject(int x, int y){
+    public GameObject(int x, int y, int screenWidth, int screenHeight){
         this.x = x;
         this.y = y;
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
 
         //obj is not moving when it's instantiated
         this.speedX = 0;
@@ -70,6 +73,6 @@ public abstract class GameObject {
 
     //abstract methods to be implemented by subclasses----------------------------------------------
     abstract public void update();
-    abstract public void render();
+    abstract public void draw(Canvas canvas);
     //----------------------------------------------------------------------------------------------
 }

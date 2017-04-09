@@ -1,5 +1,7 @@
 package com.example.charlie.g1_roll_it_in;
 
+import android.graphics.Canvas;
+
 /**
  * Created by Thong on 5/04/2017.
  */
@@ -7,8 +9,8 @@ package com.example.charlie.g1_roll_it_in;
 public class Bar extends GameObject{
     private int width, height;
 
-    public Bar(int x, int y, int width, int height){
-        super(x, y);
+    public Bar(int x, int y, int screenWidth, int screenHeight){
+        super(x, y, screenWidth, screenHeight);
         this.width = width;
         this.height = height;
     }
@@ -19,7 +21,7 @@ public class Bar extends GameObject{
     }
 
     @Override
-    public void render() {
+    public void draw(Canvas canvas) {
 
     }
 }
