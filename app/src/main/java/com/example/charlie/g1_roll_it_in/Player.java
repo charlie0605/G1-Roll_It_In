@@ -26,13 +26,14 @@ public class Player {
         //if roll in balls
         return score;
     }
+
     public void setScore(int score){
         this.score=score;
     }
     //display score
     private void displayScore(){
         if(score>=0){
-            System.out.println("Current Score:"+score);
+            System.out.println("Current Score: "+score);
         }
         else{
             System.out.println("Invalid Current Score, check method");

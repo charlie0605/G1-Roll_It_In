@@ -20,7 +20,7 @@ public class Goal extends GameObject{
 
     @Override
     public void update() {
-
+//        this.x += 50;
     }
 
     @Override

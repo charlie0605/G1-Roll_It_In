@@ -40,19 +40,26 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         width = metrics.widthPixels;
         height = metrics.heightPixels;
 
-        //create a ball
-        float ballRadius = 150f;
-        ball = new Ball(width / 2 , height - (int)(ballRadius * 2), ballRadius, width, height);
+        ball = createBall();
 
         //create a goal
         float goalRadius = 200f;
         goal = new Goal(width / 2, (int)(goalRadius * 2), goalRadius, width, height);
     }
 
+    public Ball createBall(){
+        //create a ball
+        float ballRadius = 150f;
+        return new Ball(width / 2 , height - (int)(ballRadius * 2), ballRadius, width, height);
+    }
+
     public void update(){
+        goal.update();
         if(ball != null) {
             ball.update();
             checkForGoal();
+        } else {
+            ball = createBall();
         }
     }
 
@@ -80,8 +87,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     public boolean checkForGoal(){
         float xDiff = Math.abs(goal.getX() - ball.getX());
         float yDiff = Math.abs(goal.getY() - ball.getY());
-        float radiusDiff = goal.getRadius() - ball.getRadius();
-        if(xDiff <= radiusDiff && yDiff <= radiusDiff){
+        float delta = 60f;
+        float radiusDiff = goal.getRadius() - ball.getRadius() + delta;
+
+        if(xDiff <= radiusDiff  && yDiff <= radiusDiff){
             ball = null;
             return true;
         } else {

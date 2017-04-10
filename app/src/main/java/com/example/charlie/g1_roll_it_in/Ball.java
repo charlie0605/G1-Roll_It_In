@@ -19,7 +19,7 @@ public class Ball extends GameObject{
         this.color = Color.RED;
     }
 
-    public int getColor(){
+    public int getRandomColor(){
         return Color.argb(255, 255, 255, 255);
         //will make this random
     }
@@ -39,9 +39,22 @@ public class Ball extends GameObject{
         this.moveY();
         if(x <= radius || x >= screenWidth - radius){
             speedX *= -1;
+            if(x < radius) {
+                x = (int) radius;
+            }
+            if(x > screenWidth - radius){
+                x = (int) (screenWidth - radius);
+            }
+
         }
         if(y <= radius || y >= screenHeight - radius){
             speedY *= -1;
+            if(y < radius) {
+                y = (int) radius;
+            }
+            if(y > screenHeight - radius){
+                y = (int) (screenHeight - radius);
+            }
         }
     }
 
@@ -59,9 +72,9 @@ public class Ball extends GameObject{
     @Override
     public void setSpeedX(float speedX){
         if(Math.abs(speedX) > 10000){
-            this.speedX = speedX / 100;
+            this.speedX = speedX / 5000;
         } else if(Math.abs(speedX) > 1000) {
-            this.speedX = speedX / 10;
+            this.speedX = speedX / 500;
         } else {
             this.speedX = speedX;
         }
@@ -72,7 +85,7 @@ public class Ball extends GameObject{
         if(Math.abs(speedY) > 10000){
             this.speedY = speedY / 1000;
         } else if(Math.abs(speedY) > 1000) {
-            this.speedY = speedY / 100;
+            this.speedY = speedY / 1000;
         } else {
             this.speedY = speedY;
         }
