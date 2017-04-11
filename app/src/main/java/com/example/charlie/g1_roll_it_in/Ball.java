@@ -83,9 +83,9 @@ public class Ball extends GameObject{
     @Override
     public void setSpeedY(float speedY){
         if(Math.abs(speedY) > 10000){
-            this.speedY = speedY / 1000;
+            this.speedY = speedY / 5000;
         } else if(Math.abs(speedY) > 1000) {
-            this.speedY = speedY / 1000;
+            this.speedY = speedY / 500;
         } else {
             this.speedY = speedY;
         }
