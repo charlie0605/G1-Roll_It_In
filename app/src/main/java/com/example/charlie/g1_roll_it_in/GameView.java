@@ -18,6 +18,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     private MainThread thread;
     private Ball ball;
     private Goal goal;
+    private Player player;
     private GestureDetector gestureDetector;
     private int width, height;
 
@@ -40,24 +41,32 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         width = metrics.widthPixels;
         height = metrics.heightPixels;
 
+        //create a ball
         ball = createBall();
 
+        //create a player
+        player = new Player("Justin");
+
         //create a goal
-        float goalRadius = 200f;
+        float goalRadius = width / 7;
         goal = new Goal(width / 2, (int)(goalRadius * 2), goalRadius, width, height);
     }
 
     public Ball createBall(){
         //create a ball
-        float ballRadius = 150f;
+        float ballRadius = width / 10;
         return new Ball(width / 2 , height - (int)(ballRadius * 2), ballRadius, width, height);
     }
 
     public void update(){
+        player.update();
+        goal.update(player);
         goal.update();
         if(ball != null) {
             ball.update();
-            checkForGoal();
+            if(checkForGoal()){
+                player.addScore();
+            }
         } else {
             ball = createBall();
         }
@@ -66,6 +75,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     public void draw(Canvas canvas){
         super.draw(canvas);
         canvas.drawColor(Color.argb(255, 255, 255, 255));
+        player.draw(canvas);
         goal.draw(canvas);
         if(ball != null) {
             ball.draw(canvas);//draw ball after the goal so it will appear on top
@@ -87,7 +97,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     public boolean checkForGoal(){
         float xDiff = Math.abs(goal.getX() - ball.getX());
         float yDiff = Math.abs(goal.getY() - ball.getY());
-        float delta = 60f;
+        float delta = ball.getRadius() / 2;
         float radiusDiff = goal.getRadius() - ball.getRadius() + delta;
 
         if(xDiff <= radiusDiff  && yDiff <= radiusDiff){
@@ -140,11 +150,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         if(ball != null) {
-            System.out.println("Fling baby!");
+            System.out.println("Before scaling:");
             System.out.println(velocityX);
             System.out.println(velocityY);
-            ball.setSpeedX(velocityX / 100);
-            ball.setSpeedY(velocityY / 100);
+            ball.setSpeedX(velocityX);
+            ball.setSpeedY(velocityY);
+            System.out.println("After scaling:");
             System.out.println("Speed X: " + ball.getSpeedX());
             System.out.println("Speed Y: " + ball.getSpeedY());
         }
