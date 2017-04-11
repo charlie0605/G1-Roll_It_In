@@ -26,13 +26,13 @@ public class GameUI extends AppCompatActivity {
         setContentView(R.layout.menu);
         gameView = new GameView(this);
 
-        Button button = (Button)findViewById(R.id.playButton);
-        button.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                setContentView(gameView);
-            }
-        });
+//        Button button = (Button)findViewById(R.id.playButton);
+//        button.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View v){
+//                setContentView(gameView);
+//            }
+//        });
 
     }
 
