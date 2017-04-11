@@ -9,17 +9,23 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.text.TextPaint;
 
 
 public class Player {
 
     private String name;
     private int score;
-    private int HighScore=50;
+    private int highScore;
+//    private int HighScore=50;
 
     public Player(String name){
         this.name = name;
-        this.score = 0;
+        this.score = 9;
+        this.highScore = 0;
     }
 
     public int getScore(){
@@ -29,6 +35,14 @@ public class Player {
 
     public void setScore(int score){
         this.score=score;
+    }
+
+    public int getHighScore(){
+       return this.highScore;
+    }
+
+    public void addScore(){
+        this.score++;
     }
     //display score
     private void displayScore(){
@@ -47,14 +61,14 @@ public class Player {
         //set high score
         //display high score
         if(score>=0){
-            if(HighScore<score){
+            if(highScore<score){
                 System.out.println("New High score!");
-                HighScore=score;
-                System.out.print("High score: "+HighScore);
+                highScore=score;
+                System.out.print("High score: "+highScore);
             }
             else{
                 System.out.println("Better luck next time!");
-                System.out.println("High score: "+HighScore);
+                System.out.println("High score: "+highScore);
             }
         }
         else{
@@ -63,4 +77,19 @@ public class Player {
     }
     //String scores=gamePrefs.getString("highScores","");
 
+    public void update(){
+        if(this.score > highScore){
+            highScore = this.score;
+        }
+    }
+
+    public void draw(Canvas canvas) {
+        String highScoreStr = "Highscore: " + this.getHighScore();
+        String scoreStr = "Score: " + this.getScore();
+        TextPaint textPaint = new TextPaint();
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        textPaint.setTextSize(60);
+        canvas.drawText(highScoreStr, canvas.getWidth()/2, canvas.getHeight()/2, textPaint);
+        canvas.drawText(scoreStr, canvas.getWidth()/2, canvas.getHeight()/2 + 60, textPaint);
+    }
 }
