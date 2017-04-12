@@ -10,7 +10,6 @@ import java.util.ArrayList;
 public abstract class GameObject {
     protected int x, y;
     protected float speedX, speedY;
-    protected int screenWidth, screenHeight;
 
     //constructor-----------------------------------------------------------------------------------
     public GameObject(int x, int y){

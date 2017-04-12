@@ -1,5 +1,6 @@
 package com.example.charlie.g1_roll_it_in;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
 /**
  * Created by Thong on 5/04/2017.
@@ -9,12 +10,11 @@ public class Ball extends RoundObject{
 
     public Ball(int x, int y, float radius){
         super(x, y, radius);
-        this.radius = radius;
-        this.color = getRandomColor();//get a random color for each ball
+        this.color = Color.RED;//get a random color for each ball
     }
 
     public int getRandomColor(){
-        return Color.argb(255, 0, 0, 255);
+        return Color.argb(255, 255, 0, 0);
         //will make this random
     }
 
@@ -23,22 +23,23 @@ public class Ball extends RoundObject{
         super.update();
 
         //will check for collision with the bars instead later on
-        if(x <= radius || x >= screenWidth - radius){
+        if(x <= radius || x >= GameView.width - radius){
             speedX *= -1;
             if(x < radius) {
                 x = (int) radius;
             }
-            if(x > screenWidth - radius){
-                x = (int) (screenWidth - radius);
+            if(x > GameView.width - radius){
+                x = (int) (GameView.width - radius);
             }
         }
-        if(y <= radius || y >= screenHeight - radius){
-            speedY *= -1;
+        
+        if(y <= radius || x >= GameView.height - radius){
+            speedX *= -1;
             if(y < radius) {
                 y = (int) radius;
             }
-            if(y > screenHeight - radius){
-                y = (int) (screenHeight - radius);
+            if(x > GameView.height - radius){
+                x = (int) (GameView.height - radius);
             }
         }
     }
