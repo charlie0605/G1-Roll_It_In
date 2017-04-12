@@ -13,11 +13,9 @@ public abstract class GameObject {
     protected int screenWidth, screenHeight;
 
     //constructor-----------------------------------------------------------------------------------
-    public GameObject(int x, int y, int screenWidth, int screenHeight){
+    public GameObject(int x, int y){
         this.x = x;
         this.y = y;
-        this.screenWidth = screenWidth;
-        this.screenHeight = screenHeight;
 
         //obj is not moving when it's instantiated
         this.speedX = 0;

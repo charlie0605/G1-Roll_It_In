@@ -8,29 +8,45 @@ import android.graphics.Paint;
  * Created by Thong on 9/04/2017.
  */
 
-public class Goal extends GameObject{
-    private float radius;
-    private int color;
+public class Goal extends RoundObject{
+    private boolean updatedSpeed = false;
 
-    public Goal(int x, int y, float radius, int screenWidth, int screenHeight) {
-        super(x, y, screenWidth, screenHeight);
-        this.radius = radius;
+    public Goal(int x, int y, float radius) {
+        super(x, y, radius);
         this.color = Color.BLACK;
     }
 
     @Override
     public void update() {
-//        this.x += 50;
+        //goal will only move horizontally, so no need to update y
+        x += speedX;
+
+        //check if the goal reaches the edge horizontally
+        if(x <= radius || x >= GameView.width - radius){
+            speedX *= -1;
+            if(x < radius) {
+                x = (int) radius;
+            }
+            if(x > GameView.width - radius){
+                x = (int) (GameView.width - radius);
+            }
+        }
     }
 
-    @Override
-    public void draw(Canvas canvas) {
-        Paint paint = new Paint();
-        paint.setColor(this.color);
-        canvas.drawCircle(this.x, this.y, this.radius, paint);
-    }
-
-    public float getRadius() {
-        return radius;
+    //update the speed of goal according to the player's score
+    public void update(Player player) {
+        if (player.getScore() == 20) {
+            if(!updatedSpeed) {
+                this.setSpeedX(30);
+                updatedSpeed = true;
+            }
+        } else if (player.getScore() == 10) {
+            if(!updatedSpeed) {
+                this.setSpeedX(15);
+                updatedSpeed = true;
+            }
+        } else {
+            updatedSpeed = false;
+        }
     }
 }
