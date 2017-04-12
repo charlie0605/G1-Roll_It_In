@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">G1-Roll_It_In</string>
+    <string name="app_name">G1 Roll It In</string>
+    <string name="soundBtn">Sound Button</string>
+    <string name="musicBtn">Music Button</string>
 </resources>

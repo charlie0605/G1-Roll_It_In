@@ -20,12 +20,12 @@ public class GameUI extends AppCompatActivity {
         int screenHeight = metrics.heightPixels;
         int screenWidth = metrics.widthPixels;
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.menu);
         gameView = new GameView(this);
-
+//
         Button button = (Button)findViewById(R.id.playButton);
         button.setOnClickListener(new View.OnClickListener(){
             @Override
