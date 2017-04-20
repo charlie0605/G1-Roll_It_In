@@ -8,11 +8,11 @@ import java.util.ArrayList;
  */
 
 public abstract class GameObject {
-    protected int x, y;
+    protected float x, y;
     protected float speedX, speedY;
 
     //constructor-----------------------------------------------------------------------------------
-    public GameObject(int x, int y){
+    public GameObject(float x, float y){
         this.x = x;
         this.y = y;
 
@@ -35,15 +35,15 @@ public abstract class GameObject {
     //----------------------------------------------------------------------------------------------
 
     //getters and setters---------------------------------------------------------------------------
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 

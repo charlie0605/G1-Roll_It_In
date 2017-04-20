@@ -12,7 +12,7 @@ public abstract class RoundObject extends GameObject {
     protected int color;
 
     //constructor-----------------------------------------------------------------------------------
-    public RoundObject(int x, int y, float radius) {
+    public RoundObject(float x, float y, float radius) {
         super(x, y);
         this.radius = radius;
     }

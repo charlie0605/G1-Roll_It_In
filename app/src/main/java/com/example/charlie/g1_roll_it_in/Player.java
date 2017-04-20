@@ -5,6 +5,7 @@ package com.example.charlie.g1_roll_it_in;
  */
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.TextPaint;
 
@@ -17,7 +18,7 @@ public class Player {
 
     public Player(String name){
         this.name = name;
-        this.score = 9;
+        this.score = 0;
         this.highScore = 0;
     }
 
@@ -80,8 +81,13 @@ public class Player {
         String scoreStr = "Score: " + this.getScore();
         TextPaint textPaint = new TextPaint();
         textPaint.setTextAlign(Paint.Align.CENTER);
-        textPaint.setTextSize(60);
+        textPaint.setTextSize(100);
         canvas.drawText(highScoreStr, canvas.getWidth()/2, canvas.getHeight()/2, textPaint);
-        canvas.drawText(scoreStr, canvas.getWidth()/2, canvas.getHeight()/2 + 60, textPaint);
+        canvas.drawText(scoreStr, canvas.getWidth()/2, canvas.getHeight()/2 + 100, textPaint);
+        textPaint.setStyle(Paint.Style.STROKE);
+        textPaint.setStrokeWidth(5);
+        textPaint.setColor(Color.WHITE);
+        canvas.drawText(highScoreStr, canvas.getWidth()/2, canvas.getHeight()/2, textPaint);
+        canvas.drawText(scoreStr, canvas.getWidth()/2, canvas.getHeight()/2 + 100, textPaint);
     }
 }

@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class Ball extends RoundObject{
 
-    public Ball(int x, int y, float radius){
+    public Ball(float x, float y, float radius){
         super(x, y, radius);
         this.color = getRandomColor();//get a random color for each ball
     }

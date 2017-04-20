@@ -1,8 +1,11 @@
 package com.example.charlie.g1_roll_it_in;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -10,12 +13,16 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
+import java.util.Random;
+
 /**
  * Created by Thong on 7/04/2017.
  */
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener{
     private MainThread thread;
+    private Bitmap bitmap;
+    private Drawable drawable;
     private Ball ball;
     private Goal goal;
     private Player player;
@@ -51,14 +58,65 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         });
 
 
-        ball = createBall();//create a ball
+        ball = createBallAtCenterX();//create a ball
         player = new Player("Justin");//create a player
         goal = createGoal();//create a goal
+        drawable = createRandomDrawable();
+//        bitmap = createRandomBitmap();//create a random bitmap
     }
 
-    public Ball createBall(){
+    public Bitmap createRandomBitmap(){
+        Random rand = new Random();
+
+        //load the images
+        int[] images = new int[]{
+                R.drawable.bg1,
+                R.drawable.bg2,
+                R.drawable.bg3,
+                R.drawable.bg4,
+                R.drawable.bg5,
+                R.drawable.bg6,
+                R.drawable.bg7,
+                R.drawable.bg8,
+                R.drawable.bg9,
+                R.drawable.bg10
+        };
+
+        //return a random image
+        return BitmapFactory.decodeResource(getResources(), images[rand.nextInt(images.length) + 1]);
+    }
+
+    public Drawable createRandomDrawable(){
+        Random rand = new Random();
+
+        //load the images
+        int[] images = new int[]{
+                R.drawable.bg1,
+                R.drawable.bg2,
+                R.drawable.bg3,
+                R.drawable.bg4,
+                R.drawable.bg5,
+                R.drawable.bg6,
+                R.drawable.bg7,
+                R.drawable.bg8,
+                R.drawable.bg9,
+                R.drawable.bg10
+        };
+
+        //return a random image
+        return getResources().getDrawable(images[rand.nextInt(images.length) + 1]);
+    }
+
+    public Ball createBallAtCenterX(){
         float ballRadius = width / 10;
         return new Ball(width / 2 , height - (int)(ballRadius * 2), ballRadius);
+    }
+
+    public Ball createBallAtRandomX(){
+        float ballRadius = width / 10;
+        float minX = ballRadius;
+        float maxX = width - ballRadius;
+        return new Ball(getRandomFloatBetween(minX, maxX), height - (int)(ballRadius * 2), ballRadius);
     }
 
     public Goal createGoal(){
@@ -76,13 +134,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 player.addScore();
             }
         } else {
-            ball = createBall();
+            ball = createBallAtRandomX();
         }
     }
 
     public void draw(Canvas canvas){
         super.draw(canvas);
-        canvas.drawColor(Color.argb(255, 255, 255, 255));
+//        canvas.drawColor(Color.BLACK);
+//        canvas.drawBitmap(bitmap, 0, 0, null);
+        drawable.setBounds(canvas.getClipBounds());
+        drawable.draw(canvas);
         player.draw(canvas);
         goal.draw(canvas);
         if(ball != null) {
@@ -102,6 +163,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             return true;
         } else {
             return false;
+        }
+    }
+
+    public float getRandomFloatBetween(float min, float max){
+        if(min < max) {
+            Random r = new Random();
+            return r.nextFloat() * (max - min) + min;
+        } else {
+            throw new IllegalArgumentException("Min value shouldn't be higher than max value");
         }
     }
     //----------------------------------------------------------------------------------------------
