@@ -216,8 +216,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             System.out.println("Before scaling:");
             System.out.println(velocityX);
             System.out.println(velocityY);
-            ball.setSpeedX(velocityX);
-            ball.setSpeedY(velocityY);
+//            ball.setSpeedX(velocityX);
+//            ball.setSpeedY(velocityY);
+            ball.setSpeed(velocityX, velocityY);
             System.out.println("After scaling:");
             System.out.println("Speed X: " + ball.getSpeedX());
             System.out.println("Speed Y: " + ball.getSpeedY());

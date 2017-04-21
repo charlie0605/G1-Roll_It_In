@@ -56,6 +56,11 @@ public class Ball extends RoundObject{
         }
     }
 
+    public void setSpeed(float speedX, float speedY){
+        this.speedX = speedX * getScale(speedX, speedY);
+        this.speedY = speedY * getScale(speedX, speedY);
+    }
+
     @Override
     public void setSpeedX(float speedX){
         this.speedX = scaleSpeed(speedX);
@@ -66,12 +71,17 @@ public class Ball extends RoundObject{
         this.speedY = scaleSpeed(speedY);
     }
 
-
     public float scaleSpeed(float speed){
         //scale the speed of fling so it will range between -80 to 80
         float percentage = speed / 20000;
         float maxSpeed = 80;
 
         return maxSpeed * percentage;
+    }
+
+    public float getScale(float speedX, float speedY) {
+        float vTarget = 120;
+        double v = Math.sqrt((speedX * speedX) + (speedY * speedY));
+        return vTarget / (float) v;
     }
 }
