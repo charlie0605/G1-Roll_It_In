@@ -1,4 +1,4 @@
-package com.example.charlie.g1_roll_it_in;
+package com.example.charlie.g1_roll_it_in.gameModel;
 
 import android.graphics.Canvas;
 import java.util.ArrayList;
@@ -23,6 +23,12 @@ public abstract class GameObject {
     //----------------------------------------------------------------------------------------------
 
     //helper methods--------------------------------------------------------------------------------
+
+    /**
+     * Not yet implemented
+     * @param gameObjects
+     * @return
+     */
     public boolean checkObjCollision(ArrayList<GameObject> gameObjects){
         for(GameObject gameObj: gameObjects){
             if(gameObj.equals(this)){

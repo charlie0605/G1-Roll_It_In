@@ -1,10 +1,9 @@
-package com.example.charlie.g1_roll_it_in;
+package com.example.charlie.g1_roll_it_in.gameUI;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
@@ -12,6 +11,11 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+
+import com.example.charlie.g1_roll_it_in.R;
+import com.example.charlie.g1_roll_it_in.gameModel.Ball;
+import com.example.charlie.g1_roll_it_in.gameModel.Goal;
+import com.example.charlie.g1_roll_it_in.gameModel.Player;
 
 import java.util.Random;
 
@@ -131,7 +135,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         if(ball != null) {
             ball.update();
             if(checkForGoal()){
-                player.addScore();
+                player.scoreGoal();
             }
         } else {
             ball = createBallAtRandomX();

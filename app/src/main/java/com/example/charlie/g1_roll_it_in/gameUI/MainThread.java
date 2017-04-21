@@ -1,4 +1,4 @@
-package com.example.charlie.g1_roll_it_in;
+package com.example.charlie.g1_roll_it_in.gameUI;
 
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;

@@ -1,4 +1,4 @@
-package com.example.charlie.g1_roll_it_in;
+package com.example.charlie.g1_roll_it_in.gameModel;
 
 /**
  * Created by Charlie on 4/04/2017.
@@ -34,7 +34,7 @@ public class Player {
        return this.highScore;
     }
 
-    public void addScore(){
+    public void scoreGoal(){
         this.score++;
     }
     //display score
@@ -65,7 +65,7 @@ public class Player {
             }
         }
         else{
-            System.out.println("invaild score input,check inout");
+            System.out.println("invaild score input,check input");
         }
     }
     //String scores=gamePrefs.getString("highScores","");

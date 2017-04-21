@@ -1,7 +1,8 @@
-package com.example.charlie.g1_roll_it_in;
+package com.example.charlie.g1_roll_it_in.gameModel;
 
-import android.graphics.Canvas;
 import android.graphics.Color;
+
+import com.example.charlie.g1_roll_it_in.gameUI.GameView;
 
 import java.util.Random;
 
@@ -14,6 +15,11 @@ public class Ball extends RoundObject{
     public Ball(float x, float y, float radius){
         super(x, y, radius);
         this.color = getRandomColor();//get a random color for each ball
+    }
+
+    public Ball(float x, float y, float radius, int color){
+        super(x, y, radius);
+        this.color = color;
     }
 
     public int getRandomColor(){
