@@ -1,6 +1,7 @@
 package com.example.charlie.g1_roll_it_in.gameModel;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 
 /**
@@ -45,9 +46,14 @@ public abstract class RoundObject extends GameObject {
 
     public void draw(Canvas canvas){
         Paint paint = new Paint();
+//        paint.setColor(Color.WHITE);
+//        paint.setStyle(Paint.Style.STROKE);
+//        paint.setStrokeWidth(10);
+//        canvas.drawCircle(x, y, radius, paint);
+        paint.setShadowLayer(20, 0, 0, Color.DKGRAY);
         paint.setColor(color);
-        //draw the circle onto the canvas using the paint tool
-        canvas.drawCircle(x, y, radius, paint);
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(x, y, radius, paint);//draw the circle onto the canvas using the paint tool
     }
     //----------------------------------------------------------------------------------------------
 }

@@ -77,7 +77,7 @@ public class Player {
     }
 
     public void draw(Canvas canvas) {
-        String highScoreStr = "Highscore: " + this.getHighScore();
+        String highScoreStr = "Best: " + this.getHighScore();
         String scoreStr = "Score: " + this.getScore();
         TextPaint textPaint = new TextPaint();
         textPaint.setTextAlign(Paint.Align.CENTER);

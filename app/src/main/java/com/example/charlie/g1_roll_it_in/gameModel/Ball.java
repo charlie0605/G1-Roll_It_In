@@ -11,15 +11,37 @@ import java.util.Random;
  */
 
 public class Ball extends RoundObject{
+    private boolean out;
+    private boolean touched;
 
     public Ball(float x, float y, float radius){
         super(x, y, radius);
         this.color = getRandomColor();//get a random color for each ball
+        out = false;
+        touched = false;
     }
 
     public Ball(float x, float y, float radius, int color){
         super(x, y, radius);
         this.color = color;
+        out = false;
+        touched = false;
+    }
+
+    public boolean isOut() {
+        return out;
+    }
+
+    public void setOut(boolean out) {
+        this.out = out;
+    }
+
+    public boolean isTouched() {
+        return touched;
+    }
+
+    public void setTouched(boolean touched) {
+        this.touched = touched;
     }
 
     public int getRandomColor(){
@@ -35,6 +57,28 @@ public class Ball extends RoundObject{
         super.update();
 
         //will check for collision with the bars instead later on
+//        checkCollisionLeftRight();
+//        checkBallOutTopBottom();
+
+        checkBallOutTopBottom();
+        checkBallOutLeftRight();
+    }
+
+    public void checkBallOutTopBottom(){
+        //if ball is out of top and bottom
+        if(y <= -radius || y >= GameView.height + radius){
+            out = true;
+        }
+    }
+
+    public void checkBallOutLeftRight(){
+        //if ball is out of left and right
+        if(x <= -radius || x >= GameView.width + radius){
+            out = true;
+        }
+    }
+
+    public void checkCollisionLeftRight(){
         if(x <= radius || x >= GameView.width - radius){
             speedX *= -1;
             if(x < radius) {
@@ -44,7 +88,9 @@ public class Ball extends RoundObject{
                 x = (int) (GameView.width - radius);
             }
         }
+    }
 
+    public void checkCollisionTopBottom(){
         if(y <= radius || y >= GameView.height - radius){
             speedY *= -1;
             if(y < radius) {
@@ -80,7 +126,7 @@ public class Ball extends RoundObject{
     }
 
     public float getScale(float speedX, float speedY) {
-        float vTarget = 120;
+        float vTarget = 100;
         double v = Math.sqrt((speedX * speedX) + (speedY * speedY));
         return vTarget / (float) v;
     }

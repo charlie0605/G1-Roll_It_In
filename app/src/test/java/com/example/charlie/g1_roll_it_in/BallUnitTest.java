@@ -23,5 +23,6 @@ public class BallUnitTest {
         assertEquals("Scale speed 10000", 40, ball.scaleSpeed(10000), 0.1f);
         assertEquals("Scale speed 20000", 80, ball.scaleSpeed(20000), 0.1f);
         assertEquals("Scale speed 5000", 20, ball.scaleSpeed(5000), 0.1f);
+
     }
 }

@@ -1,10 +1,14 @@
 package com.example.charlie.g1_roll_it_in.gameUI;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.res.ResourcesCompat;
+import android.text.TextPaint;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -25,11 +29,13 @@ import java.util.Random;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener{
     private MainThread thread;
-    private Bitmap bitmap;
     private Drawable drawable;
     private Ball ball;
     private Goal goal;
     private Player player;
+    private boolean gameOver;
+    private RectF outerRect;
+    private Rect mainRect, restartRect;
     private GestureDetector gestureDetector;
     public static int width, height;
 
@@ -61,33 +67,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             }
         });
 
-
         ball = createBallAtCenterX();//create a ball
         player = new Player("Justin");//create a player
         goal = createGoal();//create a goal
+        gameOver = false;
         drawable = createRandomDrawable();
-//        bitmap = createRandomBitmap();//create a random bitmap
-    }
-
-    public Bitmap createRandomBitmap(){
-        Random rand = new Random();
-
-        //load the images
-        int[] images = new int[]{
-                R.drawable.bg1,
-                R.drawable.bg2,
-                R.drawable.bg3,
-                R.drawable.bg4,
-                R.drawable.bg5,
-                R.drawable.bg6,
-                R.drawable.bg7,
-                R.drawable.bg8,
-                R.drawable.bg9,
-                R.drawable.bg10
-        };
-
-        //return a random image
-        return BitmapFactory.decodeResource(getResources(), images[rand.nextInt(images.length) + 1]);
     }
 
     public Drawable createRandomDrawable(){
@@ -108,7 +92,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         };
 
         //return a random image
-        return getResources().getDrawable(images[rand.nextInt(images.length) + 1]);
+        return ResourcesCompat.getDrawable(getResources(), images[rand.nextInt(images.length)], null);
     }
 
     public Ball createBallAtCenterX(){
@@ -129,27 +113,60 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     }
 
     public void update(){
-        player.update();
-        goal.update(player);
-        goal.update();
-        if(ball != null) {
-            ball.update();
-            if(checkForGoal()){
-                player.scoreGoal();
+        if(!gameOver) {
+            player.update();
+            goal.update(player);
+            goal.update();
+            if (ball != null) {
+                if (checkForGoal()) {
+                    player.scoreGoal();
+                } else {
+                    ball.update();
+                }
+                if (ball.isOut()){
+                    gameOver = true;
+                }
+            } else {
+                ball = createBallAtRandomX();
             }
-        } else {
-            ball = createBallAtRandomX();
         }
     }
 
     public void draw(Canvas canvas){
+        TextPaint paint = new TextPaint();
+        paint.setColor(Color.BLACK);
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setShadowLayer(20, 0, 0, Color.WHITE);
+        paint.setTextSize(width / 10);
         super.draw(canvas);
-//        canvas.drawColor(Color.BLACK);
-//        canvas.drawBitmap(bitmap, 0, 0, null);
         drawable.setBounds(canvas.getClipBounds());
         drawable.draw(canvas);
-        player.draw(canvas);
         goal.draw(canvas);
+
+        if(gameOver) {
+            int spacing = width / 10;
+            paint.setColor(Color.argb(150, 195, 195, 195));
+            //left, top, right, bottom
+            outerRect = new RectF(width / 6, height / 4, width / 6 * 5, height/ 4 * 3);
+            restartRect = new Rect(width / 8 * 3, height / 5 * 3, width / 8 * 5, height / 20 * 13);
+            mainRect = new Rect(restartRect.left, restartRect.top + spacing, restartRect.right, restartRect.bottom + spacing);
+
+            canvas.drawRoundRect(outerRect, 20, 20, paint);
+
+            paint.setColor(Color.RED);
+            canvas.drawText("GAME OVER", width / 2, outerRect.top + spacing , paint);
+            paint.setColor(Color.GRAY);
+            canvas.drawRect(restartRect, paint);
+            canvas.drawRect(mainRect, paint);
+            paint.setTextSize(width / 15);
+            paint.setColor(Color.BLACK);
+            canvas.drawText("Restart", restartRect.exactCenterX(), restartRect.bottom, paint);
+            canvas.drawText("Main", mainRect.exactCenterX(), mainRect.bottom, paint);
+            player.draw(canvas);
+        } else {
+            canvas.drawText(player.getScore() + "", width / 2, height / 2, paint);
+        }
+
         if(ball != null) {
             ball.draw(canvas);//draw ball after the goal so it will appear on top
         }
@@ -162,7 +179,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         float delta = ball.getRadius() / 2;
         float radiusDiff = goal.getRadius() - ball.getRadius() + delta;
 
-        if(xDiff <= radiusDiff  && yDiff <= radiusDiff){
+        if(xDiff <= radiusDiff  && yDiff <= radiusDiff){//goal
             ball = null;
             return true;
         } else {
@@ -213,22 +230,44 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         if(ball != null) {//check if the ball exists
-            System.out.println("Before scaling:");
-            System.out.println(velocityX);
-            System.out.println(velocityY);
+            if(!ball.isTouched()) {
+                System.out.println("Before scaling:");
+                System.out.println(velocityX);
+                System.out.println(velocityY);
 //            ball.setSpeedX(velocityX);
 //            ball.setSpeedY(velocityY);
-            ball.setSpeed(velocityX, velocityY);
-            System.out.println("After scaling:");
-            System.out.println("Speed X: " + ball.getSpeedX());
-            System.out.println("Speed Y: " + ball.getSpeedY());
+                ball.setSpeed(velocityX, velocityY);
+                System.out.println("After scaling:");
+                System.out.println("Speed X: " + ball.getSpeedX());
+                System.out.println("Speed Y: " + ball.getSpeedY());
+                ball.setTouched(true);
+            }
         }
         return true;
     }
 
     @Override
     public boolean onDown(MotionEvent e) {
-        return false;
+        if(gameOver) {
+            if (restartRect.contains((int) e.getX(), (int) e.getY())) {
+                System.out.println("Restart pressed!");
+                gameOver = false;
+                System.out.println(gameOver);
+                player.setScore(0);
+                ball = createBallAtCenterX();
+            }
+            if (mainRect.contains((int) e.getX(), (int) e.getY())) {
+                System.out.println("Main pressed!");
+                ((GameUI)getContext()).setContentView(R.layout.menu);
+                ((GameUI)getContext()).init();
+                gameOver = false;
+                player.setScore(0);
+                ball = createBallAtCenterX();
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
