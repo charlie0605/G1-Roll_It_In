@@ -18,6 +18,7 @@ import android.view.View;
 
 import com.example.charlie.g1_roll_it_in.R;
 import com.example.charlie.g1_roll_it_in.gameModel.Ball;
+import com.example.charlie.g1_roll_it_in.gameModel.Effect;
 import com.example.charlie.g1_roll_it_in.gameModel.Goal;
 import com.example.charlie.g1_roll_it_in.gameModel.Player;
 
@@ -33,9 +34,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     private Ball ball;
     private Goal goal;
     private Player player;
-    private boolean gameOver;
+    private boolean gameOver, pause, response;
     private RectF outerRect;
-    private Rect mainRect, restartRect;
+    private Rect secondRect, firstRect;
+    private TextPaint paint;
     private GestureDetector gestureDetector;
     public static int width, height;
 
@@ -71,7 +73,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         player = new Player("Justin");//create a player
         goal = createGoal();//create a goal
         gameOver = false;
+        pause = false;
+        response = false;
         drawable = createRandomDrawable();
+        paint = new TextPaint();
+        player.setScore(9);
     }
 
     public Drawable createRandomDrawable(){
@@ -113,7 +119,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     }
 
     public void update(){
-        if(!gameOver) {
+        if(!gameOver && !pause) {
             player.update();
             goal.update(player);
             goal.update();
@@ -129,47 +135,54 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             } else {
                 ball = createBallAtRandomX();
             }
+            if (player.getScore() > 0 && player.getScore() % 10 == 0 && !response){
+                pause = true;
+            }
         }
     }
 
     public void draw(Canvas canvas){
-        TextPaint paint = new TextPaint();
-        paint.setColor(Color.BLACK);
-        paint.setTextAlign(Paint.Align.CENTER);
-        paint.setShadowLayer(20, 0, 0, Color.WHITE);
-        paint.setTextSize(width / 10);
         super.draw(canvas);
         drawable.setBounds(canvas.getClipBounds());
         drawable.draw(canvas);
         goal.draw(canvas);
-
         if(gameOver) {
-            int spacing = width / 10;
-            paint.setColor(Color.argb(150, 195, 195, 195));
-            //left, top, right, bottom
-            outerRect = new RectF(width / 6, height / 4, width / 6 * 5, height/ 4 * 3);
-            restartRect = new Rect(width / 8 * 3, height / 5 * 3, width / 8 * 5, height / 20 * 13);
-            mainRect = new Rect(restartRect.left, restartRect.top + spacing, restartRect.right, restartRect.bottom + spacing);
-
-            canvas.drawRoundRect(outerRect, 20, 20, paint);
-
-            paint.setColor(Color.RED);
-            canvas.drawText("GAME OVER", width / 2, outerRect.top + spacing , paint);
-            paint.setColor(Color.GRAY);
-            canvas.drawRect(restartRect, paint);
-            canvas.drawRect(mainRect, paint);
-            paint.setTextSize(width / 15);
-            paint.setColor(Color.BLACK);
-            canvas.drawText("Restart", restartRect.exactCenterX(), restartRect.bottom, paint);
-            canvas.drawText("Main", mainRect.exactCenterX(), mainRect.bottom, paint);
+            drawPopUp(canvas, "GAME OVER", "Restart", "Main");
             player.draw(canvas);
         } else {
+            paint.setColor(Color.BLACK);
+            paint.setTextAlign(Paint.Align.CENTER);
+            paint.setShadowLayer(20, 0, 0, Color.WHITE);
+            paint.setTextSize(width / 10);
             canvas.drawText(player.getScore() + "", width / 2, height / 2, paint);
         }
 
         if(ball != null) {
             ball.draw(canvas);//draw ball after the goal so it will appear on top
         }
+        if(pause && !response){//for every 10th score
+            drawPopUp(canvas, "Chance", "Yes", "No");
+            canvas.drawText("Use a chance?", width / 2, height / 2, paint);
+        }
+    }
+
+    public void drawPopUp(Canvas canvas, String heading, String button1, String button2){
+        int spacing = width / 10;
+        paint.setColor(Color.argb(150, 195, 195, 195));
+        //left, top, right, bottom
+        outerRect = new RectF(width / 6, height / 4, width / 6 * 5, height/ 4 * 3);
+        firstRect = new Rect(width / 8 * 3, height / 5 * 3, width / 8 * 5, height / 20 * 13);
+        secondRect = new Rect(firstRect.left, firstRect.top + spacing, firstRect.right, firstRect.bottom + spacing);
+        canvas.drawRoundRect(outerRect, 20, 20, paint);
+        paint.setColor(Color.RED);
+        canvas.drawText(heading, width / 2, outerRect.top + spacing , paint);
+        paint.setColor(Color.GRAY);
+        canvas.drawRect(firstRect, paint);
+        canvas.drawRect(secondRect, paint);
+        paint.setTextSize(width / 15);
+        paint.setColor(Color.BLACK);
+        canvas.drawText(button1, firstRect.exactCenterX(), firstRect.bottom, paint);
+        canvas.drawText(button2, secondRect.exactCenterX(), secondRect.bottom, paint);
     }
 
     //helper methods--------------------------------------------------------------------------------
@@ -249,14 +262,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     @Override
     public boolean onDown(MotionEvent e) {
         if(gameOver) {
-            if (restartRect.contains((int) e.getX(), (int) e.getY())) {
+            if (firstRect.contains((int) e.getX(), (int) e.getY())) {
                 System.out.println("Restart pressed!");
                 gameOver = false;
                 System.out.println(gameOver);
                 player.setScore(0);
                 ball = createBallAtCenterX();
             }
-            if (mainRect.contains((int) e.getX(), (int) e.getY())) {
+            if (secondRect.contains((int) e.getX(), (int) e.getY())) {
                 System.out.println("Main pressed!");
                 ((GameUI)getContext()).setContentView(R.layout.menu);
                 ((GameUI)getContext()).init();
@@ -265,9 +278,39 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 ball = createBallAtCenterX();
             }
             return true;
-        } else {
-            return false;
         }
+
+        if(pause) {
+            paint.setTextSize(width / 20);
+            if (firstRect.contains((int) e.getX(), (int) e.getY())) {
+                System.out.println("Yes pressed!");
+                Effect effect = Effect.getRandomEffect();
+                switch (effect) {
+                    case BALL_BIG:
+                        break;
+                    case BALL_SMALL:
+                        break;
+                    case GOAL_BIG:
+                        break;
+                    case GOAL_SMALL:
+                        break;
+                    default:
+                        break;
+                }
+//                MainThread.canvas.drawText(effect.getDescription(), width / 2, height / 2, paint);
+                pause = false;
+                response = true;
+            }
+            if (secondRect.contains((int) e.getX(), (int) e.getY())) {
+                System.out.println("No pressed!");
+//                MainThread.canvas.drawText("No change has been made.", width / 2, height / 2, paint);
+                pause = false;
+                response = true;
+            }
+            return true;
+        }
+
+        return false;
     }
 
     @Override
