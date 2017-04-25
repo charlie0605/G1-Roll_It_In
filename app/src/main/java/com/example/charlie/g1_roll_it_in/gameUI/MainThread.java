@@ -1,4 +1,4 @@
-package com.example.charlie.g1_roll_it_in;
+package com.example.charlie.g1_roll_it_in.gameUI;
 
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
@@ -8,7 +8,7 @@ import android.view.SurfaceHolder;
  */
 
 public class MainThread extends Thread{
-    public static final int MAX_FPS = 30;
+    public static final int MAX_FPS = 60;
     private double averageFPS;
     private SurfaceHolder surfaceHolder;
     private GameView gameView;

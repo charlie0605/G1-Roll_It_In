@@ -1,4 +1,4 @@
-package com.example.charlie.g1_roll_it_in;
+package com.example.charlie.g1_roll_it_in.gameModel;
 
 import android.graphics.Canvas;
 

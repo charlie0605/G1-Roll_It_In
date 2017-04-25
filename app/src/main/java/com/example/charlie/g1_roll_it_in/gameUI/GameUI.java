@@ -9,9 +9,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.example.charlie.g1_roll_it_in.R;
+
 public class GameUI extends AppCompatActivity {
-    public static int screenWidth, screenHeight;
     private GameView gameView;
+    private Button playButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,12 @@ public class GameUI extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.menu);
         gameView = new GameView(this);
+        init();
+    }
+
+    public void init(){
+        playButton = (Button)findViewById(R.id.playButton);
+        playButton.setOnClickListener(new View.OnClickListener(){
 
         Button playBtn = (Button)findViewById(R.id.playButton);
 
@@ -43,4 +51,14 @@ public class GameUI extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if(findViewById(android.R.id.content) == gameView) {
+            setContentView(R.layout.menu);
+            init();
+        }
+        else {
+            finish();//close the app, but still runs in background
+        }
+    }
 }
