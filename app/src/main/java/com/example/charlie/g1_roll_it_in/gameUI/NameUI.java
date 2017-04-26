@@ -20,7 +20,6 @@ import com.example.charlie.g1_roll_it_in.gameModel.Player;
 
 public class NameUI extends Activity {
     private String playerName;
-    private Player aPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +41,6 @@ public class NameUI extends Activity {
                 EditText edText = (EditText) findViewById(R.id.name);
                 edText.setInputType(InputType.TYPE_CLASS_TEXT);
                 playerName = edText.getText().toString();
-                aPlayer = new Player(playerName);
                 Intent intent = new Intent(getApplicationContext(),MenuUI.class);
 
                 startActivity(intent);
