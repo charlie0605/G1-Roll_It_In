@@ -271,8 +271,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             }
             if (secondRect.contains((int) e.getX(), (int) e.getY())) {
                 System.out.println("Main pressed!");
-                ((GameUI)getContext()).setContentView(R.layout.menu);
-                ((GameUI)getContext()).init();
+                ((MenuUI)getContext()).setContentView(R.layout.menu);
+                ((MenuUI)getContext()).playPressed();
                 gameOver = false;
                 player.setScore(0);
                 ball = createBallAtCenterX();
