@@ -41,6 +41,9 @@ public class NameUI extends Activity {
                 EditText edText = (EditText) findViewById(R.id.name);
                 edText.setInputType(InputType.TYPE_CLASS_TEXT);
                 playerName = edText.getText().toString();
+                if(playerName.isEmpty()){
+                    playerName = "Guest";
+                }
                 Intent intent = new Intent(getApplicationContext(),MenuUI.class);
 
                 startActivity(intent);
