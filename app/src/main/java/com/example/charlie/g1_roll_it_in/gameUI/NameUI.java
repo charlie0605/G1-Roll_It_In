@@ -2,6 +2,7 @@ package com.example.charlie.g1_roll_it_in.gameUI;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -32,9 +33,12 @@ public class NameUI extends Activity {
 
     public void continuePressed(){
         Button playBtn = (Button) findViewById(R.id.continueBtn);
+        final MediaPlayer sound = MediaPlayer.create(NameUI.this,R.raw.button31);
+
         playBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                sound.start();
                 EditText edText = (EditText) findViewById(R.id.name);
                 edText.setInputType(InputType.TYPE_CLASS_TEXT);
                 playerName = edText.getText().toString();
