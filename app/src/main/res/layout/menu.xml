@@ -1,38 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <Switch
+        android:id="@+id/soundSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:checked="true"
+        android:text="Sound"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:id="@+id/linearLayout2">
+        android:layout_marginTop="19dp" />
 
-        <ImageButton
-            android:id="@+id/button2"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="0.33"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:src="@drawable/sound"
-            android:text="Button" />
-
-        <ImageButton
-            android:id="@+id/button3"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_weight="0.33"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:src="@drawable/music"
-            android:text="Button" />
-
-    </LinearLayout>
+    <Switch
+        android:id="@+id/musicSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.79"
+        android:checked="true"
+        android:splitTrack="false"
+        android:text="Music"
+        android:layout_below="@+id/soundSwitch"
+        android:layout_alignParentEnd="true" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -58,10 +49,10 @@
             android:text="Instruction" />
 
         <Button
-            android:id="@+id/leaderBoardButton"
+            android:id="@+id/leaderboardButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="Leaderboard" />
     </LinearLayout>
 
 </RelativeLayout>
