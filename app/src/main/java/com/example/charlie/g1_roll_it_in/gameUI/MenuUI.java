@@ -18,7 +18,7 @@ import com.example.charlie.g1_roll_it_in.R;
 
 public class MenuUI extends Activity {
     private GameView gameView;
-
+    private MediaPlayer sound;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +44,13 @@ public class MenuUI extends Activity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        sound.release();
+        sound = null;
+    }
+
     public void instruction(){
         Button playBtn = (Button) findViewById(R.id.instuctionButton);
         playBtn.setOnClickListener(new View.OnClickListener(){
@@ -56,7 +63,7 @@ public class MenuUI extends Activity {
     }
 
     public void sound(){
-        final MediaPlayer sound = MediaPlayer.create(MenuUI.this,R.raw.m1);
+        sound = MediaPlayer.create(MenuUI.this,R.raw.m1);
         final Switch soundBtn = (Switch) findViewById(R.id.musicSwitch);
         sound.start();
         sound.setLooping(true);
