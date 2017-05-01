@@ -8,7 +8,7 @@ import android.view.SurfaceHolder;
  */
 
 public class MainThread extends Thread{
-    public static final int MAX_FPS = 60;
+    public static final int MAX_FPS = 30;
     private double averageFPS;
     private SurfaceHolder surfaceHolder;
     private GameView gameView;
@@ -70,7 +70,7 @@ public class MainThread extends Thread{
                 averageFPS = 1000/ ((totalTime/frameCount) / 1000000);
                 frameCount = 0;
                 totalTime = 0;
-//                System.out.println(averageFPS);
+                System.out.println(averageFPS);
             }
 
         }
