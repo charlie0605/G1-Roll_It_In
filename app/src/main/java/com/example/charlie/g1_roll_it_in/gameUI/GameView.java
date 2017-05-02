@@ -1,6 +1,8 @@
 package com.example.charlie.g1_roll_it_in.gameUI;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -31,15 +33,17 @@ import java.util.Random;
 public class GameView extends SurfaceView implements SurfaceHolder.Callback, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener{
     private MainThread thread;
     private Drawable drawable;
+    private Bitmap bitmap;
     private Ball ball;
     private Goal goal;
     private Player player;
-    private boolean gameOver, pause, response;
+    private boolean gameOver, pause, response, first;
     private RectF outerRect;
     private Rect secondRect, firstRect;
     private TextPaint paint;
     private GestureDetector gestureDetector;
     public static int width, height;
+    private DisplayMetrics metrics;
 
     /**
      * Construct a game view
@@ -52,7 +56,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         setFocusable(true);
 
         //get the phone display pixels
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        metrics = context.getResources().getDisplayMetrics();
         width = metrics.widthPixels;
         height = metrics.heightPixels;
 
@@ -72,10 +76,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         ball = createBallAtCenterX();//create a ball
         player = new Player("Justin");//create a player
         goal = createGoal();//create a goal
+//        first = true;
         gameOver = false;
         pause = false;
         response = false;
         drawable = createRandomDrawable();
+        bitmap = createRandomBitmap();
         paint = new TextPaint();
         player.setScore(9);
     }
@@ -100,6 +106,29 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         //return a random image
         return ResourcesCompat.getDrawable(getResources(), images[rand.nextInt(images.length)], null);
     }
+
+    public Bitmap createRandomBitmap(){
+        Random rand = new Random();
+
+        //load the images
+        int[] images = new int[]{
+                R.drawable.bg1,
+                R.drawable.bg2,
+                R.drawable.bg3,
+                R.drawable.bg4,
+                R.drawable.bg5,
+                R.drawable.bg6,
+                R.drawable.bg7,
+                R.drawable.bg8,
+                R.drawable.bg9,
+                R.drawable.bg10
+        };
+
+        //return a random image
+        return BitmapFactory.decodeResource(getResources(), images[rand.nextInt(images.length)], null);
+    }
+
+
 
     public Ball createBallAtCenterX(){
         float ballRadius = width / 10;
@@ -143,8 +172,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
 
     public void draw(Canvas canvas){
         super.draw(canvas);
-        drawable.setBounds(canvas.getClipBounds());
-        drawable.draw(canvas);
+//        canvas.drawBitmap(bitmap, getMatrix(), paint);
+//        drawable.setBounds(canvas.getClipBounds());
+//        drawable.draw(canvas);
+        canvas.drawColor(Color.WHITE);
         goal.draw(canvas);
         if(gameOver) {
             drawPopUp(canvas, "GAME OVER", "Restart", "Main");
@@ -249,7 +280,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 System.out.println(velocityY);
 //            ball.setSpeedX(velocityX);
 //            ball.setSpeedY(velocityY);
-                ball.setSpeed(velocityX, velocityY);
+                ball.setSpeed(velocityX / metrics.density, velocityY / metrics.density);
                 System.out.println("After scaling:");
                 System.out.println("Speed X: " + ball.getSpeedX());
                 System.out.println("Speed Y: " + ball.getSpeedY());
@@ -264,19 +295,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         if(gameOver) {
             if (firstRect.contains((int) e.getX(), (int) e.getY())) {
                 System.out.println("Restart pressed!");
-                gameOver = false;
-                System.out.println(gameOver);
-                player.setScore(0);
                 ball = createBallAtCenterX();
+                goal = createGoal();
+                player.setScore(0);
+                gameOver = false;
             }
             if (secondRect.contains((int) e.getX(), (int) e.getY())) {
                 System.out.println("Main pressed!");
                 ((GameUI)getContext()).finish();
-//                ((MenuUI)getContext()).setContentView(R.layout.menu);
-//                ((MenuUI)getContext()).playPressed();
-                gameOver = false;
-                player.setScore(0);
-                ball = createBallAtCenterX();
             }
             return true;
         }
