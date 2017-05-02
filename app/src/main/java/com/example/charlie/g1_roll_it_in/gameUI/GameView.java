@@ -141,6 +141,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         }
     }
 
+    public boolean isGameOver(){
+        return gameOver;
+    }
+
     public void draw(Canvas canvas){
         super.draw(canvas);
 //        drawable.setBounds(canvas.getClipBounds());
