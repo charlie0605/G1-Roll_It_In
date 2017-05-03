@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.charlie.g1_roll_it_in.R;
 import com.example.charlie.g1_roll_it_in.gameModel.Ball;
@@ -40,6 +41,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     private TextPaint paint;
     private GestureDetector gestureDetector;
     public static int width, height;
+    private float ballRadius, goalRadius;
+    private int round;
 
     /**
      * Construct a game view
@@ -69,6 +72,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             }
         });
 
+        ballRadius = width / 10;
+        goalRadius = width / 7;
+        round = 0;
         ball = createBallAtCenterX();//create a ball
         player = new Player("Justin");//create a player
         goal = createGoal();//create a goal
@@ -102,19 +108,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     }
 
     public Ball createBallAtCenterX(){
-        float ballRadius = width / 10;
         return new Ball(width / 2 , height - (int)(ballRadius * 2), ballRadius);
     }
 
     public Ball createBallAtRandomX(){
-        float ballRadius = width / 10;
         float minX = ballRadius;
         float maxX = width - ballRadius;
         return new Ball(getRandomFloatBetween(minX, maxX), height - (int)(ballRadius * 2), ballRadius);
     }
 
     public Goal createGoal(){
-        float goalRadius = width / 7;
         return new Goal(width / 2, (int)(goalRadius * 2), goalRadius);
     }
 
@@ -124,6 +127,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             goal.update(player);
             goal.update();
             if (ball != null) {
+                if(round <= 0){
+                    ballRadius = width / 10;
+                    ball.setRadius(ballRadius);
+                    goalRadius = width / 7;
+                    goal.setRadius(goalRadius);
+                }
+
                 if (checkForGoal()) {
                     player.scoreGoal();
                 } else {
@@ -149,6 +159,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         super.draw(canvas);
 //        drawable.setBounds(canvas.getClipBounds());
 //        drawable.draw(canvas);
+        canvas.drawColor(Color.WHITE);
         goal.draw(canvas);
         if(gameOver) {
             drawPopUp(canvas, "GAME OVER", "Restart", "Main");
@@ -198,6 +209,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
 
         if(xDiff <= radiusDiff  && yDiff <= radiusDiff){//goal
             ball = null;
+            if(round > 0){
+                round--;
+            }
             return true;
         } else {
             return false;
@@ -265,6 +279,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
 
     @Override
     public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
         if(gameOver) {
             if (firstRect.contains((int) e.getX(), (int) e.getY())) {
                 System.out.println("Restart pressed!");
@@ -272,15 +296,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 System.out.println(gameOver);
                 player.setScore(0);
                 ball = createBallAtCenterX();
+                goal = createGoal();
+                round = 0;
             }
             if (secondRect.contains((int) e.getX(), (int) e.getY())) {
                 System.out.println("Main pressed!");
                 ((GameUI)getContext()).finish();
-//                ((MenuUI)getContext()).setContentView(R.layout.menu);
-//                ((MenuUI)getContext()).playPressed();
-                gameOver = false;
-                player.setScore(0);
-                ball = createBallAtCenterX();
             }
             return true;
         }
@@ -292,39 +313,39 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 Effect effect = Effect.getRandomEffect();
                 switch (effect) {
                     case BALL_BIG:
+                        ballRadius *= 2;
+                        ball.setRadius(ballRadius);
                         break;
                     case BALL_SMALL:
+                        ballRadius *= 0.5;
+                        ball.setRadius(ballRadius);
                         break;
                     case GOAL_BIG:
+                        goalRadius *= 2;
+                        goal.setRadius(goalRadius);
                         break;
                     case GOAL_SMALL:
+                        goalRadius *= 0.5;
+                        goal.setRadius(goalRadius);
                         break;
                     default:
                         break;
                 }
-//                MainThread.canvas.drawText(effect.getDescription(), width / 2, height / 2, paint);
+                Toast.makeText(this.getContext(), effect.getDescription(), Toast.LENGTH_SHORT).show();
+                round = 5;
                 pause = false;
                 response = true;
             }
             if (secondRect.contains((int) e.getX(), (int) e.getY())) {
                 System.out.println("No pressed!");
 //                MainThread.canvas.drawText("No change has been made.", width / 2, height / 2, paint);
+                Toast.makeText(this.getContext(), "No change has been made.", Toast.LENGTH_SHORT).show();
                 pause = false;
                 response = true;
             }
             return true;
         }
 
-        return false;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent e) {
-
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
         return false;
     }
 

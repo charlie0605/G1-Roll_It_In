@@ -30,26 +30,7 @@ public class GameUI extends AppCompatActivity{
 
             startActivity(intent);
         }
-
-
-
     }
-    private GameOverListner gameOverListner;
-    public void setGameOverListner(GameOverListner gameOverListner){
-        this.gameOverListner = gameOverListner;
-    }
-    private void stateChanged(){
-        if(gameOverListner != null){
-            gameOverListner.onStateChange(true);
-        }
-    }
-
-
-
-    public interface GameOverListner{
-        public void onStateChange(Object... booleanChanged);
-    }
-
 }
 
 
