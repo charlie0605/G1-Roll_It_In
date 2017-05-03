@@ -313,19 +313,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 Effect effect = Effect.getRandomEffect();
                 switch (effect) {
                     case BALL_BIG:
-                        ballRadius *= 2;
+                        ballRadius = goalRadius;
                         ball.setRadius(ballRadius);
                         break;
                     case BALL_SMALL:
-                        ballRadius *= 0.5;
+                        ballRadius *= 0.7;
                         ball.setRadius(ballRadius);
                         break;
                     case GOAL_BIG:
-                        goalRadius *= 2;
+                        goalRadius *= 1.5;
                         goal.setRadius(goalRadius);
                         break;
                     case GOAL_SMALL:
-                        goalRadius *= 0.5;
+                        goalRadius = ballRadius;
                         goal.setRadius(goalRadius);
                         break;
                     default:
