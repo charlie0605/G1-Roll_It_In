@@ -18,26 +18,35 @@ import com.example.charlie.g1_roll_it_in.R;
 
 public class MenuUI extends Activity {
     private GameView gameView;
+    private MediaPlayer music;
     private MediaPlayer sound;
+    private Switch soundBtn;
+    private Switch musicBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.menu);
 
+        sound = MediaPlayer.create(MenuUI.this,R.raw.button14);
+        soundBtn = (Switch) findViewById(R.id.soundSwitch);
+        musicBtn = (Switch) findViewById(R.id.musicSwitch);
+
         playPressed();
-        sound();
-        instruction();
+        musicActionListener();
+        instructionBtnListener();
     }
 
 
     public void playPressed(){
         Button playBtn = (Button) findViewById(R.id.playButton);
-        final MediaPlayer sound = MediaPlayer.create(MenuUI.this,R.raw.button14);
 
         playBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                if(soundBtn.isChecked()){
+                    sound.start();
+                }
                 Intent intent = new Intent(getApplicationContext(),GameUI.class);
                 startActivity(intent);
             }
@@ -47,33 +56,35 @@ public class MenuUI extends Activity {
     @Override
     public void onBackPressed() {
         finish();
-        sound.release();
-        sound = null;
+        music.release();
+        music = null;
     }
 
-    public void instruction(){
+    public void instructionBtnListener(){
         Button playBtn = (Button) findViewById(R.id.instuctionButton);
         playBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),InstructionUI.class);
+                if(soundBtn.isChecked()){
+                    sound.start();
+                }
+                Intent intent = new Intent(getApplicationContext(),GameOverMenu.class);
                 startActivity(intent);
             }
         });
     }
 
-    public void sound(){
-        sound = MediaPlayer.create(MenuUI.this,R.raw.m1);
-        final Switch soundBtn = (Switch) findViewById(R.id.musicSwitch);
-        sound.start();
-        sound.setLooping(true);
-        soundBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+    public void musicActionListener(){
+        music = MediaPlayer.create(MenuUI.this,R.raw.m1);
+        music.start();
+        music.setLooping(true);
+        musicBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (soundBtn.isChecked()){
-                    sound.start();
+                if (musicBtn.isChecked()){
+                    music.start();
                 }else{
-                    sound.pause();
+                    music.pause();
                 }
             }
         });

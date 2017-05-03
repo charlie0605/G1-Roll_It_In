@@ -21,6 +21,9 @@
         <activity
             android:name=".gameUI.InstructionUI"
             android:theme="@style/AppTheme.CustomTheme" />
+        <activity
+            android:name=".gameUI.GameOverMenu"
+            android:theme="@style/AppTheme.CustomTheme"/>
     </application>
 
 </manifest>
