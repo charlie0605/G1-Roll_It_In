@@ -4,22 +4,25 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.charlie.g1_roll_it_in.R;
-import com.example.charlie.g1_roll_it_in.gameModel.Player;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 
 /**
  * Created by Charlie on 26/04/2017.
  */
 
 public class NameUI extends Activity {
-    private String playerName;
+    public static String playerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,7 @@ public class NameUI extends Activity {
                 if(playerName.isEmpty()){
                     playerName = "Guest";
                 }
+
                 Intent intent = new Intent(getApplicationContext(),MenuUI.class);
 
                 startActivity(intent);

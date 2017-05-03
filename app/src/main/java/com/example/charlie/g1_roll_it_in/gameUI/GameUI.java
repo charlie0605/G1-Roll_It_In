@@ -11,7 +11,7 @@ import android.widget.EditText;
 
 import com.example.charlie.g1_roll_it_in.R;
 
-public class GameUI extends AppCompatActivity{
+public class GameUI extends AppCompatActivity {
     private GameView gameView;
 
     @Override
@@ -30,24 +30,14 @@ public class GameUI extends AppCompatActivity{
 
             startActivity(intent);
         }
+    }
 
 
-
-    }
-    private GameOverListner gameOverListner;
-    public void setGameOverListner(GameOverListner gameOverListner){
-        this.gameOverListner = gameOverListner;
-    }
-    private void stateChanged(){
-        if(gameOverListner != null){
-            gameOverListner.onStateChange(true);
-        }
-    }
 
 
 
     public interface GameOverListner{
-        public void onStateChange(Object... booleanChanged);
+        public void onStateChange(boolean gameOver);
     }
 
 }

@@ -1,12 +1,14 @@
 package com.example.charlie.g1_roll_it_in.gameUI;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextPaint;
 import android.util.DisplayMetrics;
@@ -15,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.charlie.g1_roll_it_in.R;
 import com.example.charlie.g1_roll_it_in.gameModel.Ball;
@@ -22,7 +25,19 @@ import com.example.charlie.g1_roll_it_in.gameModel.Effect;
 import com.example.charlie.g1_roll_it_in.gameModel.Goal;
 import com.example.charlie.g1_roll_it_in.gameModel.Player;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+
+import static com.example.charlie.g1_roll_it_in.gameUI.NameUI.playerName;
 
 /**
  * Created by Thong on 7/04/2017.
@@ -34,12 +49,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     private Ball ball;
     private Goal goal;
     private Player player;
+    private HashMap<String,Integer> playersMap;
     private boolean gameOver, pause, response;
     private RectF outerRect;
     private Rect secondRect, firstRect;
     private TextPaint paint;
     private GestureDetector gestureDetector;
     public static int width, height;
+
+    public String path = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/players";
 
     /**
      * Construct a game view
@@ -50,7 +68,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         super(context);
         getHolder().addCallback(this);
         setFocusable(true);
-
+        playersMap = new HashMap<>();
         //get the phone display pixels
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         width = metrics.widthPixels;
@@ -70,7 +88,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         });
 
         ball = createBallAtCenterX();//create a ball
-        player = new Player("Justin");//create a player
+        player = new Player(playerName);//create a player
         goal = createGoal();//create a goal
         gameOver = false;
         pause = false;
@@ -78,6 +96,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         drawable = createRandomDrawable();
         paint = new TextPaint();
         player.setScore(9);
+
+        File dir = new File(path);
+        if(!dir.exists()){
+            dir.mkdir();
+        }
+
+        readFile();
     }
 
     public Drawable createRandomDrawable(){
@@ -131,6 +156,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 }
                 if (ball.isOut()){
                     gameOver = true;
+                    if(!playersMap.containsKey(player.getName()) || playersMap.get(player.getName())< player.getHighScore())
+                        playersMap.put(player.getName(),player.getHighScore());
+                    writingToFile();
                 }
             } else {
                 ball = createBallAtRandomX();
@@ -147,6 +175,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
 
     public void draw(Canvas canvas){
         super.draw(canvas);
+        canvas.drawColor(Color.WHITE);
 //        drawable.setBounds(canvas.getClipBounds());
 //        drawable.draw(canvas);
         goal.draw(canvas);
@@ -211,6 +240,53 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         } else {
             throw new IllegalArgumentException("Min value shouldn't be higher than max value");
         }
+    }
+
+    public void writingToFile(){
+        String playerInfo = "";
+        File file = new File(path + "/players.txt");
+
+        try {
+            FileOutputStream fo = new FileOutputStream(file);
+
+            for(Map.Entry<String, Integer> entry: playersMap.entrySet()) {
+                playerInfo = entry.getKey() + " " + entry.getValue() + "\n";
+                fo.write(playerInfo.toString().getBytes());
+            }
+
+            fo.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void readFile(){
+        BufferedReader in = null;
+
+        try {
+            in = new BufferedReader(new FileReader(path + "/players.txt"));
+            String line;
+            String[] splitLine;
+            while ((line = in.readLine()) != null) {
+                splitLine = line.split(" ");
+                playersMap.put(splitLine[0], Integer.valueOf(splitLine[1]));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                    in = null;
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+
     }
     //----------------------------------------------------------------------------------------------
 
