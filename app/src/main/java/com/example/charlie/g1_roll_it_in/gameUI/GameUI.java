@@ -1,5 +1,6 @@
 package com.example.charlie.g1_roll_it_in.gameUI;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -10,7 +11,7 @@ import android.widget.EditText;
 
 import com.example.charlie.g1_roll_it_in.R;
 
-public class GameUI extends AppCompatActivity {
+public class GameUI extends AppCompatActivity{
     private GameView gameView;
 
     @Override
@@ -23,5 +24,13 @@ public class GameUI extends AppCompatActivity {
         gameView = new GameView(this);
 
         setContentView(gameView);
+
+        if(gameView.isGameOver()){
+            Intent intent = new Intent(getApplicationContext(),GameOverMenu.class);
+
+            startActivity(intent);
+        }
     }
 }
+
+

@@ -17,7 +17,7 @@ public class Player {
     private int highScore;
 
     public Player(String name){
-        this.name = name;
+        this.setName(name);
         this.score = 0;
         this.highScore = 0;
     }
@@ -89,5 +89,13 @@ public class Player {
         textPaint.setColor(Color.WHITE);
         canvas.drawText(highScoreStr, canvas.getWidth()/2, canvas.getHeight()/2, textPaint);
         canvas.drawText(scoreStr, canvas.getWidth()/2, canvas.getHeight()/2 + 100, textPaint);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
