@@ -132,10 +132,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if(msg.what==1){
+                if(msg.what==0){
                     Toast.makeText(getContext(), "Good job", Toast.LENGTH_SHORT).show();
                 }
-                if(msg.what==2){
+                if(msg.what==1){
                     Toast.makeText(getContext(), "Better luck next time", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -193,7 +193,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
 
                 if (checkForGoal()) {
                     Message msg = handler.obtainMessage();
-                    msg.what=1;
+                    msg.what=0;
                     handler.sendMessage(msg);
                     player.scoreGoal();
                 } else {
@@ -201,7 +201,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 }
                 if (ball.isOut()){
                     Message msg = handler.obtainMessage();
-                    msg.what = 2;
+                    msg.what = 1;
                     handler.sendMessage(msg);
                     gameOver = true;
                     if(!playersMap.containsKey(player.getName()) || playersMap.get(player.getName())< player.getHighScore())
