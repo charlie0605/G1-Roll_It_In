@@ -1,5 +1,6 @@
 package com.example.charlie.g1_roll_it_in.gameUI;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -9,9 +10,11 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
+import android.os.Looper;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextPaint;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -37,11 +40,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
 import static com.example.charlie.g1_roll_it_in.gameUI.NameUI.playerName;
 
 /**
  * Created by Thong on 7/04/2017.
  */
+
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener{
     private MainThread thread;
@@ -58,6 +75,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     public static int width, height;
     private float ballRadius, goalRadius;
     private int round;
+    private Handler handler;
 
     public String path = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/players";
 
@@ -79,6 +97,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         //detecting the gesture for flinging the ball
         gestureDetector = new GestureDetector(context, this);
         gestureDetector.setOnDoubleTapListener(this);
+
+
 
         //get touchscreen input, so gesture detector can be used
         setOnTouchListener(new OnTouchListener() {
@@ -108,6 +128,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         }
 
         readFile();
+        handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if(msg.what==1){
+                    Toast.makeText(getContext(), "Good job", Toast.LENGTH_SHORT).show();
+                }
+                if(msg.what==2){
+                    Toast.makeText(getContext(), "Better luck next time", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
     }
 
     public Drawable createRandomDrawable(){
@@ -146,6 +178,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     }
 
     public void update(){
+
         if(!gameOver && !pause) {
             player.update();
             goal.update(player);
@@ -159,11 +192,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 }
 
                 if (checkForGoal()) {
+                    Message msg = handler.obtainMessage();
+                    msg.what=1;
+                    handler.sendMessage(msg);
                     player.scoreGoal();
                 } else {
                     ball.update();
                 }
                 if (ball.isOut()){
+                    Message msg = handler.obtainMessage();
+                    msg.what = 2;
+                    handler.sendMessage(msg);
                     gameOver = true;
                     if(!playersMap.containsKey(player.getName()) || playersMap.get(player.getName())< player.getHighScore())
                         playersMap.put(player.getName(),player.getHighScore());
@@ -364,6 +403,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
+
         if(gameOver) {
             if (firstRect.contains((int) e.getX(), (int) e.getY())) {
                 System.out.println("Restart pressed!");

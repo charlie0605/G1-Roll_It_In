@@ -29,6 +29,7 @@ public class Ball extends RoundObject{
     }
 
     public boolean isOut() {
+
         return out;
     }
 
