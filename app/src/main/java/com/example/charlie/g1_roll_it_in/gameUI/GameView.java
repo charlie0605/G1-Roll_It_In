@@ -1,7 +1,6 @@
 package com.example.charlie.g1_roll_it_in.gameUI;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -27,12 +26,9 @@ import com.example.charlie.g1_roll_it_in.gameModel.Player;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -50,7 +46,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     private Goal goal;
     private Player player;
     private HashMap<String,Integer> playersMap;
-    private boolean gameOver, pause, response;
+    private boolean gameOver, effectPause, response;
     private RectF outerRect;
     private Rect secondRect, firstRect;
     private TextPaint paint;
@@ -96,7 +92,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         player = new Player(playerName);//create a player
         goal = createGoal();//create a goal
         gameOver = false;
-        pause = false;
+        effectPause = false;
         response = false;
         drawable = createRandomDrawable();
         paint = new TextPaint();
@@ -146,7 +142,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     }
 
     public void update(){
-        if(!gameOver && !pause) {
+        if(!gameOver && !effectPause) {
             player.update();
             goal.update(player);
             goal.update();
@@ -173,7 +169,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 ball = createBallAtRandomX();
             }
             if (player.getScore() > 0 && player.getScore() % 10 == 0 && !response){
-                pause = true;
+                effectPause = true;
+            }
+            if(player.getScore() % 10 != 0){
+                response = false;
             }
         }
     }
@@ -203,7 +202,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         if(ball != null) {
             ball.draw(canvas);//draw ball after the goal so it will appear on top
         }
-        if(pause && !response){//for every 10th score
+        if(effectPause && !response){//for every 10th score
             drawPopUp(canvas, "Chance", "Yes", "No");
             canvas.drawText("Use a chance?", width / 2, height / 2, paint);
         }
@@ -239,6 +238,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             ball = null;
             if(round > 0){
                 round--;
+                if(round == 0){
+                    Toast.makeText(this.getContext(), "The effect wears off", Toast.LENGTH_SHORT).show();
+                }
             }
             return true;
         } else {
@@ -381,7 +383,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             return true;
         }
 
-        if(pause) {
+        if(effectPause) {
             paint.setTextSize(width / 20);
             if (firstRect.contains((int) e.getX(), (int) e.getY())) {
                 System.out.println("Yes pressed!");
@@ -408,14 +410,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 }
                 Toast.makeText(this.getContext(), effect.getDescription(), Toast.LENGTH_SHORT).show();
                 round = 5;
-                pause = false;
+                effectPause = false;
                 response = true;
             }
             if (secondRect.contains((int) e.getX(), (int) e.getY())) {
                 System.out.println("No pressed!");
 //                MainThread.canvas.drawText("No change has been made.", width / 2, height / 2, paint);
                 Toast.makeText(this.getContext(), "No change has been made.", Toast.LENGTH_SHORT).show();
-                pause = false;
+                effectPause = false;
                 response = true;
             }
             return true;
