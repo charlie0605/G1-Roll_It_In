@@ -1,6 +1,7 @@
 package com.example.charlie.g1_roll_it_in.gameUI;
 
 import android.graphics.Canvas;
+import android.os.Looper;
 import android.view.SurfaceHolder;
 
 /**
@@ -23,6 +24,7 @@ public class MainThread extends Thread{
 
     @Override
     public void run(){
+
         long startTime;
         long timeMillis = 1000/MAX_FPS;
         long waitTime;
@@ -58,7 +60,7 @@ public class MainThread extends Thread{
             waitTime = targetTime - timeMillis;
             try{
                 if(waitTime > 0){
-                    sleep(waitTime);
+                    this.sleep(waitTime);
                 }
             }
             catch (Exception e){
