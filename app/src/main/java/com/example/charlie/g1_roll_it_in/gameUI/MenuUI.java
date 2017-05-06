@@ -68,7 +68,7 @@ public class MenuUI extends Activity {
                 if(soundBtn.isChecked()){
                     sound.start();
                 }
-                Intent intent = new Intent(getApplicationContext(),GameOverMenu.class);
+                Intent intent = new Intent(getApplicationContext(),InstructionUI.class);
                 startActivity(intent);
             }
         });
