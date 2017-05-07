@@ -4,10 +4,12 @@ package com.example.charlie.g1_roll_it_in.gameModel;
  * Created by Charlie on 4/04/2017.
  */
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.TextPaint;
+import android.widget.Toast;
 
 
 public class Player {
@@ -27,6 +29,7 @@ public class Player {
     }
 
     public void setScore(int score){
+
         this.score=score;
     }
 
@@ -34,8 +37,11 @@ public class Player {
        return this.highScore;
     }
 
+
     public void scoreGoal(){
+        ;
         this.score++;
+
     }
     //display score
     private void displayScore(){
@@ -98,4 +104,7 @@ public class Player {
     public void setName(String name) {
         this.name = name;
     }
+
+
+
 }

@@ -7,10 +7,10 @@ import java.util.Random;
  */
 
 public enum Effect {
-    BALL_BIG(1, "Oh no, the ball will get bigger."),
-    BALL_SMALL(2, "Great, the ball will get smaller."),
-    GOAL_BIG(3, "Great, the goal will get bigger."),
-    GOAL_SMALL(4, "Oh no, the goal will get smaller.");
+    BALL_BIG(1, "Oh no, the ball gets bigger."),
+    BALL_SMALL(2, "Great, the ball gets smaller."),
+    GOAL_BIG(3, "Great, the goal gets bigger."),
+    GOAL_SMALL(4, "Oh no, the goal gets smaller.");
 
     private int id;
     private String description;

@@ -1,7 +1,6 @@
 package com.example.charlie.g1_roll_it_in.gameUI;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -13,6 +12,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextPaint;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -27,15 +27,15 @@ import com.example.charlie.g1_roll_it_in.gameModel.Player;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+import android.os.Handler;
+import android.os.Message;
 
 import static com.example.charlie.g1_roll_it_in.gameUI.NameUI.playerName;
 
@@ -50,14 +50,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     private Goal goal;
     private Player player;
     private HashMap<String,Integer> playersMap;
-    private boolean gameOver, pause, response;
+    private boolean gameOver, effectPause, response, pause;
     private RectF outerRect;
-    private Rect secondRect, firstRect;
+    private Rect secondRect, firstRect, pauseRect;
     private TextPaint paint;
     private GestureDetector gestureDetector;
     public static int width, height;
     private float ballRadius, goalRadius;
     private int round;
+    private Handler handler;
 
     public String path = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/players";
 
@@ -96,8 +97,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         player = new Player(playerName);//create a player
         goal = createGoal();//create a goal
         gameOver = false;
-        pause = false;
+        effectPause = false;
         response = false;
+        pause = false;
+        pauseRect = new Rect(width * 9 / 10, 0, width, width / 10);
         drawable = createRandomDrawable();
         paint = new TextPaint();
         player.setScore(9);
@@ -108,6 +111,45 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         }
 
         readFile();
+        handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                Toast myToast = null;
+                if(msg.what==0){
+                    myToast = Toast.makeText(getContext(), getEmojiByUnicode(0x1F44D), Toast.LENGTH_SHORT);
+                    if(goal.getX() > width / 2){
+                        myToast.setGravity(Gravity.TOP, (int) (-width / 5), 0);
+                    } else {
+                        myToast.setGravity(Gravity.TOP, (int) (width / 5), 0);
+                    }
+                }
+                if(msg.what==1){
+                    myToast = Toast.makeText(getContext(), getEmojiByUnicode(0x1F613), Toast.LENGTH_SHORT);
+                    if(goal.getX() > width / 2){
+                        myToast.setGravity(Gravity.TOP, (int) (-width / 5), 0);
+                    } else {
+                        myToast.setGravity(Gravity.TOP, (int) (width / 5), 0);
+                    }
+                }
+                if(msg.what==2) {
+                    myToast = Toast.makeText(getContext(), "Effect wears off after 5 turns.", Toast.LENGTH_SHORT);
+                }
+                myToast.show();
+                Handler handler = new Handler();
+                final Toast finalMyToast = myToast;
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        finalMyToast.cancel();
+                    }
+                }, 500);
+            }
+        };
+
+        if(playersMap.containsKey(player.getName())){
+            player.setHighScore(playersMap.get(player.getName()));
+        }
     }
 
     public Drawable createRandomDrawable(){
@@ -146,34 +188,47 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     }
 
     public void update(){
-        if(!gameOver && !pause) {
-            player.update();
-            goal.update(player);
-            goal.update();
-            if (ball != null) {
-                if(round <= 0){
-                    ballRadius = width / 10;
-                    ball.setRadius(ballRadius);
-                    goalRadius = width / 7;
-                    goal.setRadius(goalRadius);
-                }
+        if(!gameOver && !effectPause) {
+            if(!pause) {
+                player.update();
+                goal.update(player);
+                goal.update();
+                if (ball != null) {
+                    if (round <= 0) {
+                        ballRadius = width / 10;
+                        ball.setRadius(ballRadius);
+                        goalRadius = width / 7;
+                        goal.setRadius(goalRadius);
+                    }
 
-                if (checkForGoal()) {
-                    player.scoreGoal();
+                    if (checkForGoal()) {
+                        Message msg = handler.obtainMessage();
+                        msg.what = 0;
+                        handler.sendMessage(msg);
+
+                        player.scoreGoal();
+                    } else {
+                        ball.update();
+                    }
+                    if (ball.isOut()) {
+                        Message msg = handler.obtainMessage();
+                        msg.what = 1;
+                        handler.sendMessage(msg);
+
+                        gameOver = true;
+                        if (!playersMap.containsKey(player.getName()) || playersMap.get(player.getName()) < player.getHighScore())
+                            playersMap.put(player.getName(), player.getHighScore());
+                        writingToFile();
+                    }
                 } else {
-                    ball.update();
+                    ball = createBallAtRandomX();
                 }
-                if (ball.isOut()){
-                    gameOver = true;
-                    if(!playersMap.containsKey(player.getName()) || playersMap.get(player.getName())< player.getHighScore())
-                        playersMap.put(player.getName(),player.getHighScore());
-                    writingToFile();
+                if (player.getScore() > 0 && player.getScore() % 10 == 0 && !response) {
+                    effectPause = true;
                 }
-            } else {
-                ball = createBallAtRandomX();
-            }
-            if (player.getScore() > 0 && player.getScore() % 10 == 0 && !response){
-                pause = true;
+                if (player.getScore() % 10 != 0) {
+                    response = false;
+                }
             }
         }
     }
@@ -189,6 +244,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
 //        drawable.draw(canvas);
         canvas.drawColor(Color.WHITE);
         goal.draw(canvas);
+        if(!pause) {
+            paint.setColor(Color.BLACK);
+            canvas.drawRect(pauseRect, paint);
+            paint.setColor(Color.WHITE);
+            //left, top, right, bottom
+            paint.clearShadowLayer();
+            canvas.drawRect(width * 9 / 10, width / 50, width, width / 25, paint);
+            canvas.drawRect(width * 9 / 10, width / 50 * 3, width, width / 25 * 2, paint);
+        } else {
+            drawPopUp(canvas, "PAUSE", "Sound", "Main");
+        }
         if(gameOver) {
             drawPopUp(canvas, "GAME OVER", "Restart", "Main");
             player.draw(canvas);
@@ -203,7 +269,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         if(ball != null) {
             ball.draw(canvas);//draw ball after the goal so it will appear on top
         }
-        if(pause && !response){//for every 10th score
+        if(effectPause && !response){//for every 10th score
             drawPopUp(canvas, "Chance", "Yes", "No");
             canvas.drawText("Use a chance?", width / 2, height / 2, paint);
         }
@@ -239,6 +305,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             ball = null;
             if(round > 0){
                 round--;
+                if(round == 0){
+                    handler.sendMessage(handler.obtainMessage(2));
+                }
             }
             return true;
         } else {
@@ -253,6 +322,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         } else {
             throw new IllegalArgumentException("Min value shouldn't be higher than max value");
         }
+    }
+
+    public String getEmojiByUnicode(int unicode){
+        return new String(Character.toChars(unicode));
     }
 
     public void writingToFile(){
@@ -381,7 +454,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             return true;
         }
 
-        if(pause) {
+        if(effectPause) {
             paint.setTextSize(width / 20);
             if (firstRect.contains((int) e.getX(), (int) e.getY())) {
                 System.out.println("Yes pressed!");
@@ -408,15 +481,40 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 }
                 Toast.makeText(this.getContext(), effect.getDescription(), Toast.LENGTH_SHORT).show();
                 round = 5;
-                pause = false;
+                effectPause = false;
                 response = true;
             }
             if (secondRect.contains((int) e.getX(), (int) e.getY())) {
                 System.out.println("No pressed!");
-//                MainThread.canvas.drawText("No change has been made.", width / 2, height / 2, paint);
                 Toast.makeText(this.getContext(), "No change has been made.", Toast.LENGTH_SHORT).show();
-                pause = false;
+                effectPause = false;
                 response = true;
+            }
+            return true;
+        }
+
+        if(pauseRect.contains((int) e.getX(), (int) e.getY())){
+            pause = true;
+            return true;
+        }
+
+        if(pause){
+            if(firstRect.contains((int) e.getX(), (int) e.getY())){
+                //turn music on and off
+                if(MenuUI.music.isPlaying()){
+                    MenuUI.music.pause();
+                } else {
+                    MenuUI.music.start();
+                }
+
+            }
+            if(secondRect.contains((int) e.getX(), (int) e.getY())){
+                System.out.println("Main pressed!");
+                ((GameUI)getContext()).finish();
+            }
+
+            if(!outerRect.contains((int) e.getX(), (int) e.getY())){
+                pause = false;
             }
             return true;
         }
