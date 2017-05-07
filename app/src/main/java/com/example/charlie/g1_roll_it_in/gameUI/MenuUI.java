@@ -18,8 +18,8 @@ import com.example.charlie.g1_roll_it_in.R;
 
 public class MenuUI extends Activity {
     private GameView gameView;
-    private MediaPlayer music;
-    private MediaPlayer sound;
+    public static MediaPlayer music;
+    public static MediaPlayer sound;
     private Switch soundBtn;
     private Switch musicBtn;
     @Override
