@@ -101,7 +101,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         response = false;
         pause = false;
         pauseRect = new Rect(width * 9 / 10, 0, width, width / 10);
-        drawable = createRandomDrawable();
+//        drawable = createRandomDrawable();
+        drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.music, null);
         paint = new TextPaint();
         player.setScore(9);
 
@@ -160,13 +161,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 R.drawable.bg1,
                 R.drawable.bg2,
                 R.drawable.bg3,
-                R.drawable.bg4,
-                R.drawable.bg5,
-                R.drawable.bg6,
-                R.drawable.bg7,
-                R.drawable.bg8,
-                R.drawable.bg9,
-                R.drawable.bg10
+                R.drawable.bg4
         };
 
         //return a random image
@@ -242,7 +237,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         canvas.drawColor(Color.WHITE);
 //        drawable.setBounds(canvas.getClipBounds());
 //        drawable.draw(canvas);
-        canvas.drawColor(Color.WHITE);
         goal.draw(canvas);
         if(!pause) {
             paint.setColor(Color.BLACK);
@@ -444,6 +438,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 System.out.println(gameOver);
                 player.setScore(0);
                 ball = createBallAtCenterX();
+                goalRadius = width / 7;
                 goal = createGoal();
                 round = 0;
             }

@@ -62,8 +62,6 @@ public class MenuUI extends Activity {
     @Override
     public void onBackPressed() {
         finish();
-        music.release();
-        music = null;
     }
 
     public void instructionBtnListener(){
