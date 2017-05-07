@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -20,8 +21,8 @@ public class MenuUI extends Activity {
     private GameView gameView;
     public static MediaPlayer music;
     public static MediaPlayer sound;
-    private Switch soundBtn;
-    private Switch musicBtn;
+    public static Switch soundBtn;
+    public static Switch musicBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +32,7 @@ public class MenuUI extends Activity {
         sound = MediaPlayer.create(MenuUI.this,R.raw.button14);
         soundBtn = (Switch) findViewById(R.id.soundSwitch);
         musicBtn = (Switch) findViewById(R.id.musicSwitch);
+        music = MediaPlayer.create(MenuUI.this,R.raw.m1);
 
         playPressed();
         musicActionListener();
@@ -91,4 +93,21 @@ public class MenuUI extends Activity {
             }
         });
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(music.isPlaying()) {
+            music.pause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!music.isPlaying() && musicBtn.isChecked()) {
+            music.start();
+        }
+    }
+
 }

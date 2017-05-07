@@ -503,8 +503,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 //turn music on and off
                 if(MenuUI.music.isPlaying()){
                     MenuUI.music.pause();
+                    MenuUI.musicBtn.setChecked(false);
                 } else {
                     MenuUI.music.start();
+                    MenuUI.musicBtn.setChecked(true);
                 }
 
             }
