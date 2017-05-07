@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.example.charlie.g1_roll_it_in.R;
 
@@ -18,7 +19,7 @@ import com.example.charlie.g1_roll_it_in.R;
  */
 
 public class MenuUI extends Activity {
-    private GameView gameView;
+    private TextView welcomeMessg;
     public static MediaPlayer music;
     public static MediaPlayer sound;
     public static Switch soundBtn;
@@ -33,13 +34,14 @@ public class MenuUI extends Activity {
         soundBtn = (Switch) findViewById(R.id.soundSwitch);
         musicBtn = (Switch) findViewById(R.id.musicSwitch);
         music = MediaPlayer.create(MenuUI.this,R.raw.m1);
+        welcomeMessg = (TextView) findViewById(R.id.welcomMessg);
 
+        welcomeMessg.setText("WELCOME\n" + NameUI.playerName);
         playPressed();
         musicActionListener();
         instructionBtnListener();
+
     }
-
-
 
 
     public void playPressed(){

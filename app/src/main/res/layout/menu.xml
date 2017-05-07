@@ -12,12 +12,13 @@
         android:text="Sound"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="19dp" />
+        android:layout_marginTop="25dp" />
 
     <Switch
         android:id="@+id/musicSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:layout_weight="0.79"
         android:checked="true"
         android:splitTrack="false"
@@ -29,16 +30,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginBottom="88dp"
+        android:id="@+id/linearLayout"
+        android:layout_marginBottom="80dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout">
+        android:layout_centerHorizontal="true">
 
         <Button
             android:id="@+id/playButton"
-
             android:textColor="#FFFFFF"
-
             android:background="@drawable/buttonshape"
             android:shadowColor="#A8A8A8"
             android:shadowDx="20"
@@ -79,5 +78,19 @@
             android:layout_height="wrap_content"
             android:text="Leaderboard" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/welcomMessg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        android:text="Welcome\nPlayer"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:layout_above="@+id/linearLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="100dp" />
 
 </RelativeLayout>
