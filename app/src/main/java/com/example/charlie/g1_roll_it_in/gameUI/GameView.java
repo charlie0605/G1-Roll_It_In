@@ -247,6 +247,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         if(!pause) {
             paint.setColor(Color.BLACK);
             canvas.drawRect(pauseRect, paint);
+            paint.setColor(Color.WHITE);
+            //left, top, right, bottom
+            paint.clearShadowLayer();
+            canvas.drawRect(width * 9 / 10, width / 50, width, width / 25, paint);
+            canvas.drawRect(width * 9 / 10, width / 50 * 3, width, width / 25 * 2, paint);
         } else {
             drawPopUp(canvas, "PAUSE", "Sound", "Main");
         }
