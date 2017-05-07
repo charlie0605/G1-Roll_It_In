@@ -18,13 +18,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".gameUI.MenuUI"></activity>
-        <activity android:name=".gameUI.GameUI"></activity>
+        <activity
+            android:name=".gameUI.MenuUI"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".gameUI.GameUI"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".gameUI.InstructionUI"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.CustomTheme" />
         <activity
             android:name=".gameUI.GameOverMenu"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.CustomTheme"/>
     </application>
 
