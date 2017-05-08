@@ -8,13 +8,18 @@ import com.example.charlie.g1_roll_it_in.gameUI.GameView;
  */
 
 public class Goal extends RoundObject{
+    //variables-------------------------------------------------------------------------------------
     private boolean updatedSpeed = false;
+    //----------------------------------------------------------------------------------------------
 
+    //constructor-----------------------------------------------------------------------------------
     public Goal(int x, int y, float radius) {
         super(x, y, radius);
         this.color = Color.BLACK;
     }
+    //----------------------------------------------------------------------------------------------
 
+    //helper methods--------------------------------------------------------------------------------
     @Override
     public void update() {
         //goal will only move horizontally, so no need to update y
@@ -32,7 +37,9 @@ public class Goal extends RoundObject{
         }
     }
 
-    //update the speed of goal according to the player's score
+    /**
+     *  Updates the speed of goal according to the player's score
+     */
     public void update(Player player) {
         if (player.getScore() == 20) {
             if(!updatedSpeed) {
@@ -48,4 +55,5 @@ public class Goal extends RoundObject{
             updatedSpeed = false;
         }
     }
+    //----------------------------------------------------------------------------------------------
 }

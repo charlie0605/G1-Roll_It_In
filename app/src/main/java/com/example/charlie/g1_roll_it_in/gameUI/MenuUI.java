@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -24,6 +23,7 @@ public class MenuUI extends Activity {
     public static MediaPlayer sound;
     public static Switch soundBtn;
     public static Switch musicBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,10 +40,11 @@ public class MenuUI extends Activity {
         playPressed();
         musicActionListener();
         instructionBtnListener();
-
     }
 
-
+    /**
+     * Checks if the play button is pressed
+     */
     public void playPressed(){
         Button playBtn = (Button) findViewById(R.id.playButton);
 
@@ -64,6 +65,9 @@ public class MenuUI extends Activity {
         finish();
     }
 
+    /**
+     * Checks if instruction button is pressed
+     */
     public void instructionBtnListener(){
         Button playBtn = (Button) findViewById(R.id.instuctionButton);
         playBtn.setOnClickListener(new View.OnClickListener(){
