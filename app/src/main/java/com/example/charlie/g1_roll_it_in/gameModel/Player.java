@@ -29,7 +29,6 @@ public class Player {
     }
 
     public void setScore(int score){
-
         this.score=score;
     }
 
@@ -57,21 +56,7 @@ public class Player {
     public static final String GAME_PREFS="Score";*/
     public void setHighScore(int score){
         //set high score
-        //display high score
-        if(score>=0){
-            if(highScore<score){
-                System.out.println("New High score!");
-                highScore=score;
-                System.out.print("High score: "+highScore);
-            }
-            else{
-                System.out.println("Better luck next time!");
-                System.out.println("High score: "+highScore);
-            }
-        }
-        else{
-            System.out.println("invaild score input,check input");
-        }
+        highScore = score;
     }
     //String scores=gamePrefs.getString("highScores","");
 
