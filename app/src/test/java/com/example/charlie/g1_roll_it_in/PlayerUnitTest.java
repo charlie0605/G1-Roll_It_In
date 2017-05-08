@@ -24,4 +24,16 @@ public class PlayerUnitTest {
         player.scoreGoal();
         assertEquals("Score should be 2", 2, player.getScore());
     }
+
+    @Test
+    public void testHighScore(){
+        player.setHighScore(10);
+        player.setScore(5);
+        player.update();
+        assertEquals("High score should be 10",10,player.getHighScore());
+
+        player.setScore(15);
+        player.update();
+        assertEquals("High score should be 15",15,player.getHighScore());
+    }
 }
