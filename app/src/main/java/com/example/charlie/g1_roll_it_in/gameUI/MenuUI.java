@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.example.charlie.g1_roll_it_in.R;
 
@@ -17,11 +19,11 @@ import com.example.charlie.g1_roll_it_in.R;
  */
 
 public class MenuUI extends Activity {
-    private GameView gameView;
-    private MediaPlayer music;
-    private MediaPlayer sound;
-    private Switch soundBtn;
-    private Switch musicBtn;
+    private TextView welcomeMessg;
+    public static MediaPlayer music;
+    public static MediaPlayer sound;
+    public static Switch soundBtn;
+    public static Switch musicBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,13 +33,15 @@ public class MenuUI extends Activity {
         sound = MediaPlayer.create(MenuUI.this,R.raw.button14);
         soundBtn = (Switch) findViewById(R.id.soundSwitch);
         musicBtn = (Switch) findViewById(R.id.musicSwitch);
+        music = MediaPlayer.create(MenuUI.this,R.raw.m1);
+        welcomeMessg = (TextView) findViewById(R.id.welcomMessg);
 
+        welcomeMessg.setText("WELCOME\n" + NameUI.playerName);
         playPressed();
         musicActionListener();
         instructionBtnListener();
+
     }
-
-
 
 
     public void playPressed(){
@@ -91,4 +95,21 @@ public class MenuUI extends Activity {
             }
         });
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(music.isPlaying()) {
+            music.pause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!music.isPlaying() && musicBtn.isChecked()) {
+            music.start();
+        }
+    }
+
 }
