@@ -1,4 +1,6 @@
-package com.example.charlie.g1_roll_it_in;
+package com.example.charlie.g1_roll_it_in.gameModel;
+
+import android.graphics.Canvas;
 
 /**
  * Created by Thong on 5/04/2017.
@@ -19,7 +21,7 @@ public class Bar extends GameObject{
     }
 
     @Override
-    public void render() {
+    public void draw(Canvas canvas) {
 
     }
 }

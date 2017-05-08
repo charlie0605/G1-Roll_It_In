@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="230dp"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/continueBtn"
+        android:layout_width="150dp"
+
+        android:textColor="#FFFFFF"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="20"
+        android:shadowDy="5"
+        android:shadowRadius="5"
+
+        android:layout_height="wrap_content"
+        android:layout_marginTop="33dp"
+        android:text="Continue"
+        android:layout_below="@+id/name"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/continueBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="108dp"
+        android:fontFamily="serif"
+        android:text="Welcome to Roll It In\nPlease Enter Your Name"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+</RelativeLayout>
