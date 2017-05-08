@@ -110,12 +110,12 @@ public class Ball extends RoundObject{
 
     @Override
     public void setSpeedX(float speedX){
-        this.speedX = scaleSpeed(speedX);
+        this.speedX = speedX;
     }
 
     @Override
     public void setSpeedY(float speedY){
-        this.speedY = scaleSpeed(speedY);
+        this.speedY = speedY;
     }
 
     public float scaleSpeed(float speed){

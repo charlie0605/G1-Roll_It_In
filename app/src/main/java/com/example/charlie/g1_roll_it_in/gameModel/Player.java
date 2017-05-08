@@ -39,10 +39,9 @@ public class Player {
 
 
     public void scoreGoal(){
-        ;
         this.score++;
-
     }
+
     //display score
     private void displayScore(){
         if(score>=0){

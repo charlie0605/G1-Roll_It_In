@@ -46,10 +46,6 @@ public abstract class RoundObject extends GameObject {
 
     public void draw(Canvas canvas){
         Paint paint = new Paint();
-//        paint.setColor(Color.WHITE);
-//        paint.setStyle(Paint.Style.STROKE);
-//        paint.setStrokeWidth(10);
-//        canvas.drawCircle(x, y, radius, paint);
         paint.setShadowLayer(20, 0, 0, Color.DKGRAY);
         paint.setColor(color);
         paint.setStyle(Paint.Style.FILL);
