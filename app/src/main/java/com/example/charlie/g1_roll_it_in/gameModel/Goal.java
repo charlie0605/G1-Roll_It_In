@@ -1,7 +1,6 @@
 package com.example.charlie.g1_roll_it_in.gameModel;
 
 import android.graphics.Color;
-
 import com.example.charlie.g1_roll_it_in.gameUI.GameView;
 
 /**

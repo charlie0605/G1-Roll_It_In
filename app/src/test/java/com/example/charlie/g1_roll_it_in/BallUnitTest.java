@@ -19,10 +19,26 @@ public class BallUnitTest {
     }
 
     @Test
-    public void testScaleSpeed(){
-        assertEquals("Scale speed 10000", 40, ball.scaleSpeed(10000), 0.1f);
-        assertEquals("Scale speed 20000", 80, ball.scaleSpeed(20000), 0.1f);
-        assertEquals("Scale speed 5000", 20, ball.scaleSpeed(5000), 0.1f);
+    public void testBallDirection(){
+        float speedX = 100, speedY = 200;
+        float expectedDirection = speedX / speedY;
+        ball.setSpeed(speedX, speedY);
+        assertEquals("the expectedDirection should be the same", expectedDirection, ball.getSpeedX() / ball.getSpeedY(), 0.1f);
+
+        speedX = 400;
+        speedY = 150;
+        expectedDirection = speedX / speedY;
+        ball.setSpeed(speedX, speedY);
+        assertEquals("the expectedDirection should be the same", expectedDirection, ball.getSpeedX() / ball.getSpeedY(), 0.1f);
+    }
+
+    @Test
+    public void testBallSpeed(){
+        ball.setSpeed(100, 300);
+        assertEquals("Speed should be around 100", 100, Math.sqrt(ball.getSpeedX() * ball.getSpeedX() + ball.getSpeedY() * ball.getSpeedY()), 0.1f);
+
+        ball.setSpeed(500, 125);
+        assertEquals("Speed should be around 100", 100, Math.sqrt(ball.getSpeedX() * ball.getSpeedX() + ball.getSpeedY() * ball.getSpeedY()), 0.1f);
 
     }
 }
