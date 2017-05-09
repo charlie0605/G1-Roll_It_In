@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.charlie.g1_roll_it_in.R;
 import com.example.charlie.g1_roll_it_in.gameModel.Ball;
+import com.example.charlie.g1_roll_it_in.gameModel.Bar;
 import com.example.charlie.g1_roll_it_in.gameModel.Effect;
 import com.example.charlie.g1_roll_it_in.gameModel.Goal;
 import com.example.charlie.g1_roll_it_in.gameModel.Player;
@@ -30,6 +31,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -50,6 +52,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     private Ball ball;
     private Goal goal;
     private Player player;
+    private ArrayList<Bar> bars;
     private HashMap<String,Integer> playersMap;
     private boolean gameOver, effectPause, response, pause;
     private RectF outerRect;
@@ -98,6 +101,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         ball = createBallAtCenterX();//create a ball
         player = new Player(playerName);//create a player
         goal = createGoal();//create a goal
+        bars = new ArrayList<>();
+        bars.add(new Bar(0, 0, width / 20, height / 2));
+        bars.get(0).setSpeedY(15);
         gameOver = false;
         effectPause = false;
         response = false;
@@ -213,6 +219,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 player.update();
                 goal.update(player);
                 goal.update();
+                for(Bar bar : bars){
+                    bar.update();
+                }
                 if (ball != null) {//if ball is not disappearing
                     if (round <= 0) {//if there's no effect activating, set the radius of the ball and goal to default value
                         ballRadius = width / 10;
@@ -265,7 +274,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
 //        drawable.setBounds(canvas.getClipBounds());
 //        drawable.draw(canvas);
         goal.draw(canvas);
-
+        for(Bar bar : bars){
+            bar.draw(canvas);
+        }
         if(!pause) {
             //draw a pause button on the right upper corner
             paint.setColor(Color.BLACK);
