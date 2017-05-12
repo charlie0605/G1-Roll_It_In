@@ -74,11 +74,24 @@ public class Ball extends RoundObject{
      */
     public int getRandomColor(){
         Random rand = new Random();
+
+        int[] colors = new int[]{
+                Color.argb(255, 255, 216, 0), //gold
+                Color.argb(255, 0, 255, 255), //aqua
+                Color.argb(255, 128, 255, 208), //aquamarine
+                Color.argb(255, 176, 255, 48), //greenyellow
+                Color.argb(255, 255, 104, 176), //hotpink
+                Color.argb(255, 240, 128, 128), //lightcoral
+                Color.argb(255, 255, 96, 64), //tomato
+                Color.argb(255, 255, 255, 0) //yellow
+        };
         int red = rand.nextInt(256);
         int green = rand.nextInt(256);
         int blue = rand.nextInt(256);
-        return Color.argb(255, red, green, blue);
+//        return Color.argb(255, red, green, blue);
+        return colors[rand.nextInt(colors.length)];
     }
+
 
     /**
      * This method is repeatedly called and check whether the ball leaves the game screen
