@@ -48,7 +48,7 @@ import static com.example.charlie.g1_roll_it_in.gameUI.NameUI.playerName;
 public class GameView extends SurfaceView implements SurfaceHolder.Callback, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener{
     //variables-------------------------------------------------------------------------------------
     private MainThread thread;
-//    private Drawable drawable;
+    private int color;
     private Ball ball;
     private Goal goal;
     private Player player;
@@ -76,7 +76,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         super(context);
         getHolder().addCallback(this);
         setFocusable(true);
-        playersMap = new HashMap<>();
+
         //get the phone display pixels
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         width = metrics.widthPixels;
@@ -94,7 +94,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 return true;
             }
         });
-
+        color = getRandomColor();
+        playersMap = new HashMap<>();
         ballRadius = width / 10;
         goalRadius = width / 7;
         round = 0;
@@ -109,7 +110,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         response = false;
         pause = false;
         pauseRect = new Rect(width * 9 / 10, 0, width, width / 10);
-//        drawable = createRandomDrawable();
         paint = new TextPaint();
         player.setScore(9);
 
@@ -182,6 +182,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
 
         //return a random image
         return ResourcesCompat.getDrawable(getResources(), images[rand.nextInt(images.length)], null);
+    }
+
+    public int getRandomColor(){
+        Random rand = new Random();
+
+        int[] colors = new int[]{
+                Color.argb(255, 255, 240, 240), //lavenderblush
+                Color.argb(255, 224, 255, 255), //lightcyan
+                Color.argb(255, 209, 248, 227), //lightgreen
+                Color.argb(255, 255, 240, 208) //papayawhip
+        };
+
+        return colors[rand.nextInt(colors.length)];
     }
 
     /**
@@ -270,9 +283,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
      */
     public void draw(Canvas canvas){
         super.draw(canvas);
-        canvas.drawColor(Color.WHITE);//draw a white background
-//        drawable.setBounds(canvas.getClipBounds());
-//        drawable.draw(canvas);
+        canvas.drawColor(color);//draw a random colored background
         goal.draw(canvas);
         for(Bar bar : bars){
             bar.draw(canvas);
