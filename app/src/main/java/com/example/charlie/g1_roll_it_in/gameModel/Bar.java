@@ -34,10 +34,10 @@ public class Bar extends GameObject{
     @Override
     public void draw(Canvas canvas) {
         Paint paint = new Paint();
-        paint.setShadowLayer(20, 0, 0, Color.DKGRAY);
+        paint.setShadowLayer(10, 0, 0, Color.DKGRAY);
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL);
-        canvas.drawRect(x, y, x + width, y + height, paint);
+        canvas.drawRoundRect(x+2, y, x + width, y + height, 100,100, paint);
     }
 
     public void checkScreenCollision(){

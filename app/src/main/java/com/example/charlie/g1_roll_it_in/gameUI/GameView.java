@@ -222,6 +222,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 for(Bar bar : bars){
                     bar.update();
                 }
+
+//                if(ball.getX() <= bars.get(0).getX() ){
+//                    ball.setSpeedX((ball.getSpeedX()* -1));
+////                    if(y < radius) {
+////                        y = (int) radius;
+////                    }
+////                    if(y > GameView.height - radius){
+////                        y = (int) (GameView.height - radius);
+////                    }
+//                }
                 if (ball != null) {//if ball is not disappearing
                     if (round <= 0) {//if there's no effect activating, set the radius of the ball and goal to default value
                         ballRadius = width / 10;
@@ -229,7 +239,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                         goalRadius = width / 7;
                         goal.setRadius(goalRadius);
                     }
-
                     if (checkForGoal()) {//if there's a goal
                         Message msg = handler.obtainMessage();
                         msg.what = 0;
@@ -277,6 +286,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         for(Bar bar : bars){
             bar.draw(canvas);
         }
+
         if(!pause) {
             //draw a pause button on the right upper corner
             paint.setColor(Color.BLACK);
