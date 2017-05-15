@@ -197,12 +197,5 @@ public class Ball extends RoundObject{
                 //left, top, right, bottom
         return new Rect((int)(x- radius),(int)(y-radius),(int)(x+radius),(int)(y+radius));
     }
-
-//    public void draw(Canvas canvas){
-//        super.draw(canvas);
-//        Paint paint = new Paint();
-//        paint.setColor(Color.CYAN);
-//        canvas.drawRect(getBound(), paint);
-//    }
     //----------------------------------------------------------------------------------------------
 }
