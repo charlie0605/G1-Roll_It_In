@@ -1,7 +1,6 @@
 package com.example.charlie.g1_roll_it_in.gameUI;
 
 import android.graphics.Canvas;
-import android.os.Looper;
 import android.view.SurfaceHolder;
 
 /**
@@ -9,19 +8,24 @@ import android.view.SurfaceHolder;
  */
 
 public class MainThread extends Thread{
+    //variables-------------------------------------------------------------------------------------
     public static final int MAX_FPS = 30;
     private double averageFPS;
     private SurfaceHolder surfaceHolder;
     private GameView gameView;
     private boolean running;
     private Canvas canvas;
+    //----------------------------------------------------------------------------------------------
 
+    //constructor-----------------------------------------------------------------------------------
     public MainThread(SurfaceHolder surfaceHolder, GameView gameView){
         super();
         this.surfaceHolder = surfaceHolder;
         this.gameView = gameView;
     }
+    //----------------------------------------------------------------------------------------------
 
+    //other methods---------------------------------------------------------------------------------
     @Override
     public void run(){
 
@@ -77,7 +81,9 @@ public class MainThread extends Thread{
 
         }
     }
+    //----------------------------------------------------------------------------------------------
 
+    //getters and setters---------------------------------------------------------------------------
     public GameView getGameView() {
         return gameView;
     }
@@ -97,4 +103,5 @@ public class MainThread extends Thread{
     public Canvas getCanvas(){
         return canvas;
     }
+    //----------------------------------------------------------------------------------------------
 }

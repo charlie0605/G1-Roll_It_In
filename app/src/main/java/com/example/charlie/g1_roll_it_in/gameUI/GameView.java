@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.charlie.g1_roll_it_in.R;
 import com.example.charlie.g1_roll_it_in.gameModel.Ball;
+import com.example.charlie.g1_roll_it_in.gameModel.Bar;
 import com.example.charlie.g1_roll_it_in.gameModel.Effect;
 import com.example.charlie.g1_roll_it_in.gameModel.Goal;
 import com.example.charlie.g1_roll_it_in.gameModel.Player;
@@ -30,6 +31,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -44,11 +46,13 @@ import static com.example.charlie.g1_roll_it_in.gameUI.NameUI.playerName;
  */
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener{
+    //variables-------------------------------------------------------------------------------------
     private MainThread thread;
-    private Drawable drawable;
-    private Ball ball;
+    private int color;
+    private ArrayList<Ball> balls;
     private Goal goal;
     private Player player;
+    private ArrayList<Bar> bars;
     private HashMap<String,Integer> playersMap;
     private boolean gameOver, effectPause, response, pause;
     private RectF outerRect;
@@ -59,9 +63,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     private float ballRadius, goalRadius;
     private int round;
     private Handler handler;
-
+    private Effect effect;
     public String path = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/players";
+    //----------------------------------------------------------------------------------------------
 
+    //constructor-----------------------------------------------------------------------------------
     /**
      * Construct a game view
      *
@@ -71,7 +77,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         super(context);
         getHolder().addCallback(this);
         setFocusable(true);
-        playersMap = new HashMap<>();
+
         //get the phone display pixels
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         width = metrics.widthPixels;
@@ -89,20 +95,27 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 return true;
             }
         });
-
+        color = getRandomColor();
+        playersMap = new HashMap<>();
         ballRadius = width / 10;
         goalRadius = width / 7;
         round = 0;
-        ball = createBallAtCenterX();//create a ball
+        balls = new ArrayList<>();
+        balls.add(createBallAtCenterX());
         player = new Player(playerName);//create a player
         goal = createGoal();//create a goal
+        bars = new ArrayList<>();
+        bars.add(new Bar(0, 0, width / 20, height / 2));
+        bars.add(new Bar(width - (width/20) - 2,0,width/20,height/2));
+
+        bars.get(0).setSpeedY(15);
+        bars.get(1).setSpeedY(15);
+
         gameOver = false;
         effectPause = false;
         response = false;
         pause = false;
         pauseRect = new Rect(width * 9 / 10, 0, width, width / 10);
-//        drawable = createRandomDrawable();
-        drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.music, null);
         paint = new TextPaint();
         player.setScore(9);
 
@@ -111,8 +124,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             dir.mkdir();
         }
 
-        readFile();
-        handler = new Handler(){
+        readFile();//read files to create score map
+        handler = new Handler(){//a handler to create toast for feedbacks
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -139,6 +152,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 myToast.show();
                 Handler handler = new Handler();
                 final Toast finalMyToast = myToast;
+
+                //shorten the duration of the toast to half a second
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -148,11 +163,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             }
         };
 
+        //update the highscore of the player if their name exists in the file
         if(playersMap.containsKey(player.getName())){
             player.setHighScore(playersMap.get(player.getName()));
         }
     }
+    //----------------------------------------------------------------------------------------------
 
+    //helper methods--------------------------------------------------------------------------------
+    /**
+     * Returns a random drawable for the background
+     * @return
+     */
     public Drawable createRandomDrawable(){
         Random rand = new Random();
 
@@ -168,59 +190,109 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         return ResourcesCompat.getDrawable(getResources(), images[rand.nextInt(images.length)], null);
     }
 
+    public int getRandomColor(){
+        Random rand = new Random();
+
+        int[] colors = new int[]{
+                Color.argb(255, 255, 240, 240), //lavenderblush
+                Color.argb(255, 224, 255, 255), //lightcyan
+                Color.argb(255, 209, 248, 227), //lightgreen
+                Color.argb(255, 255, 240, 208) //papayawhip
+        };
+
+        return colors[rand.nextInt(colors.length)];
+    }
+
+    /**
+     * Creates and returns a ball at the middle x position
+     * @return
+     */
     public Ball createBallAtCenterX(){
-        return new Ball(width / 2 , height - (int)(ballRadius * 2), ballRadius);
+        return new Ball(width / 2 , height - (int)(width / 5), ballRadius);
     }
 
+    /**
+     * Creates and returns a ball at random x position
+     * @return
+     */
     public Ball createBallAtRandomX(){
-        float minX = ballRadius;
-        float maxX = width - ballRadius;
-        return new Ball(getRandomFloatBetween(minX, maxX), height - (int)(ballRadius * 2), ballRadius);
+        float minX = ballRadius * 2;
+        float maxX = width - ballRadius * 2;
+        return new Ball(getRandomFloatBetween(minX, maxX), height - (int)(width / 5), ballRadius);
     }
 
+    /**
+     * Creates and returns a new goal
+     * @return
+     */
     public Goal createGoal(){
         return new Goal(width / 2, (int)(goalRadius * 2), goalRadius);
     }
 
+    /**
+     * Updates different game objects
+     */
     public void update(){
-        if(!gameOver && !effectPause) {
-            if(!pause) {
+        if(!gameOver && !effectPause) {//if it's not game over and not every 10th iteration
+            if(!pause) {//if the game isn't paused
                 player.update();
+
                 goal.update(player);
                 goal.update();
-                if (ball != null) {
-                    if (round <= 0) {
-                        ballRadius = width / 10;
-                        ball.setRadius(ballRadius);
-                        goalRadius = width / 7;
-                        goal.setRadius(goalRadius);
-                    }
 
-                    if (checkForGoal()) {
-                        Message msg = handler.obtainMessage();
-                        msg.what = 0;
-                        handler.sendMessage(msg);
+                for(Ball ball : balls) {
+                    if (ball != null) {//if ball is not disappearing
+                        for(Bar bar : bars){
+                            bar.checkCollision(ball);
+                            bar.update();
+                        }
 
-                        player.scoreGoal();
-                    } else {
-                        ball.update();
-                    }
-                    if (ball.isOut()) {
-                        Message msg = handler.obtainMessage();
-                        msg.what = 1;
-                        handler.sendMessage(msg);
+                        if (round <= 0) {//if there's no effect activating, set the radius of the ball and goal to default value
+                            ballRadius = width / 10;
+                            ball.setRadius(ballRadius);
+                            goalRadius = width / 7;
+                            goal.setRadius(goalRadius);
+                        }
 
-                        gameOver = true;
-                        if (!playersMap.containsKey(player.getName()) || playersMap.get(player.getName()) < player.getHighScore())
-                            playersMap.put(player.getName(), player.getHighScore());
-                        writingToFile();
+                        if (checkForGoal(ball)) {//if there's a goal
+                            Message msg = handler.obtainMessage();
+                            msg.what = 0;
+                            handler.sendMessage(msg);//call a feedback
+
+                            if(balls.isEmpty()) {
+                                player.scoreGoal();//update the score
+                            }
+                        } else {
+                            ball.update();
+                        }
+
+                        if (ball.isOut()) {//if ball is out
+                            Message msg = handler.obtainMessage();
+                            msg.what = 1;
+                            handler.sendMessage(msg);//call a feedback
+
+                            gameOver = true;//confirm game over
+                            if (!playersMap.containsKey(player.getName()) || playersMap.get(player.getName()) < player.getHighScore())
+                                playersMap.put(player.getName(), player.getHighScore());
+                            writingToFile();//update the text file with the new score
+                        }
                     }
-                } else {
-                    ball = createBallAtRandomX();
                 }
+
+                if(balls.isEmpty()){//if ball disappears or is goaled
+                    if(effect == Effect.BALL_MULTIPLE){
+                        createThreeBalls();
+                    } else {
+                        balls.add(createBallAtRandomX());
+                    }
+                }
+
+                //pause the game at every 10th iteration
                 if (player.getScore() > 0 && player.getScore() % 10 == 0 && !response) {
                     effectPause = true;
                 }
+
+                //update the response
                 if (player.getScore() % 10 != 0) {
                     response = false;
                 }
@@ -228,31 +300,41 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         }
     }
 
-    public boolean isGameOver(){
-        return gameOver;
+    private void createThreeBalls() {
+        balls.add(new Ball(ballRadius * 2, height - width / 5, ballRadius));
+        balls.add(new Ball(width - ballRadius * 2, height - width / 5, ballRadius));
+        balls.add(new Ball(width  / 2, height - width / 5, ballRadius));
     }
 
+    /**
+     * Draws the objects
+     * @param canvas
+     */
     public void draw(Canvas canvas){
         super.draw(canvas);
-        canvas.drawColor(Color.WHITE);
-//        drawable.setBounds(canvas.getClipBounds());
-//        drawable.draw(canvas);
+        canvas.drawColor(color);//draw a random colored background
         goal.draw(canvas);
+        for(Bar bar : bars){
+            bar.draw(canvas);
+        }
+
         if(!pause) {
+            //draw a pause button on the right upper corner
             paint.setColor(Color.BLACK);
             canvas.drawRect(pauseRect, paint);
             paint.setColor(Color.WHITE);
-            //left, top, right, bottom
             paint.clearShadowLayer();
             canvas.drawRect(width * 9 / 10, width / 50, width, width / 25, paint);
             canvas.drawRect(width * 9 / 10, width / 50 * 3, width, width / 25 * 2, paint);
-        } else {
-            drawPopUp(canvas, "PAUSE", "Sound", "Main");
+        } else {//if game is paused
+            drawPopUp(canvas, "PAUSE", "Sound", "Main");//draws a pause pop up menu
         }
+
         if(gameOver) {
-            drawPopUp(canvas, "GAME OVER", "Restart", "Main");
-            player.draw(canvas);
-        } else {
+            drawPopUp(canvas, "GAME OVER", "Restart", "Main");//draws a game over menu
+            player.draw(canvas);//draws the player's score
+        } else {//if game is not over
+            //draw the current score at the center of the screen
             paint.setColor(Color.BLACK);
             paint.setTextAlign(Paint.Align.CENTER);
             paint.setShadowLayer(20, 0, 0, Color.WHITE);
@@ -260,15 +342,25 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             canvas.drawText(player.getScore() + "", width / 2, height / 2, paint);
         }
 
-        if(ball != null) {
-            ball.draw(canvas);//draw ball after the goal so it will appear on top
+        for(Ball ball: balls) {
+            if (ball != null) {//if ball is not goaled
+                ball.draw(canvas);//draw ball after the goal so it will appear on top
+            }
         }
+
         if(effectPause && !response){//for every 10th score
-            drawPopUp(canvas, "Chance", "Yes", "No");
+            drawPopUp(canvas, "Chance", "Yes", "No");//draws a pop up for chance
             canvas.drawText("Use a chance?", width / 2, height / 2, paint);
         }
     }
 
+    /**
+     * This method creates a pop up with two rectangles as buttons.
+     * @param canvas
+     * @param heading
+     * @param button1
+     * @param button2
+     */
     public void drawPopUp(Canvas canvas, String heading, String button1, String button2){
         int spacing = width / 10;
         paint.setColor(Color.argb(150, 195, 195, 195));
@@ -288,19 +380,26 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         canvas.drawText(button2, secondRect.exactCenterX(), secondRect.bottom, paint);
     }
 
-    //helper methods--------------------------------------------------------------------------------
-    public boolean checkForGoal(){
+    /**
+     * Checks if the ball overlaps with the goal.
+     * @return true if there is a goal and false if otherwise
+     */
+    public boolean checkForGoal(Ball ball){
         float xDiff = Math.abs(goal.getX() - ball.getX());
         float yDiff = Math.abs(goal.getY() - ball.getY());
         float delta = ball.getRadius() / 2;
         float radiusDiff = goal.getRadius() - ball.getRadius() + delta;
 
+        //checks the difference in radius of the ball and goal objects
         if(xDiff <= radiusDiff  && yDiff <= radiusDiff){//goal
-            ball = null;
-            if(round > 0){
-                round--;
-                if(round == 0){
-                    handler.sendMessage(handler.obtainMessage(2));
+//            ball = null;
+            balls.remove(ball);
+            if(balls.isEmpty()) {
+                if (round > 0) {
+                    round--;
+                    if (round == 0) {
+                        handler.sendMessage(handler.obtainMessage(2));//calls for a feedback
+                    }
                 }
             }
             return true;
@@ -309,6 +408,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         }
     }
 
+    /**
+     * Returns a random float between the specified range
+     * @param min
+     * @param max
+     * @return
+     */
     public float getRandomFloatBetween(float min, float max){
         if(min < max) {
             Random r = new Random();
@@ -318,10 +423,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         }
     }
 
+    /**
+     * Gets the string representation of an emoji by specifying its unicode value
+     * @param unicode
+     * @return
+     */
     public String getEmojiByUnicode(int unicode){
         return new String(Character.toChars(unicode));
     }
 
+    /**
+     * Writes the score into a text file
+     */
     public void writingToFile(){
         String playerInfo = "";
         File file = new File(path + "/players.txt");
@@ -335,14 +448,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             }
 
             fo.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
+    /**
+     * Reads the score from the text file
+     */
     public void readFile(){
         BufferedReader in = null;
 
@@ -366,7 +479,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 }
             }
         }
-
     }
     //----------------------------------------------------------------------------------------------
 
@@ -400,20 +512,31 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     //----------------------------------------------------------------------------------------------
 
     //gesture detection-----------------------------------------------------------------------------
+
+    /**
+     * Used to move the ball in the direction of the swipe gesture
+     * @param e1
+     * @param e2
+     * @param velocityX
+     * @param velocityY
+     * @return
+     */
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        if(ball != null) {//check if the ball exists
-            if(!ball.isTouched()) {
-                System.out.println("Before scaling:");
-                System.out.println(velocityX);
-                System.out.println(velocityY);
-//            ball.setSpeedX(velocityX);
-//            ball.setSpeedY(velocityY);
-                ball.setSpeed(velocityX, velocityY);
-                System.out.println("After scaling:");
-                System.out.println("Speed X: " + ball.getSpeedX());
-                System.out.println("Speed Y: " + ball.getSpeedY());
-                ball.setTouched(true);
+        for(Ball ball: balls) {
+            if(ball.getBound().contains((int) e1.getX(), (int) e1.getY())){
+//            if (ball != null) {//check if the ball exists
+                if (!ball.isTouched()) {
+                    //for debugging
+                    System.out.println("Before scaling:");
+                    System.out.println(velocityX);
+                    System.out.println(velocityY);
+                    ball.setSpeed(velocityX, velocityY);
+                    System.out.println("After scaling:");
+                    System.out.println("Speed X: " + ball.getSpeedX());
+                    System.out.println("Speed Y: " + ball.getSpeedY());
+                    ball.setTouched(true);
+                }
             }
         }
         return true;
@@ -429,20 +552,29 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
 
     }
 
+    /**
+     * Checks if the buttons of the pop menu have been pressed
+     * @param e
+     * @return
+     */
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
         if(gameOver) {
             if (firstRect.contains((int) e.getX(), (int) e.getY())) {
                 System.out.println("Restart pressed!");
+                //restart the game
                 gameOver = false;
                 System.out.println(gameOver);
                 player.setScore(0);
-                ball = createBallAtCenterX();
+                balls.clear();
+                balls.add(createBallAtCenterX());
                 goalRadius = width / 7;
                 goal = createGoal();
                 round = 0;
+                effect = null;
             }
             if (secondRect.contains((int) e.getX(), (int) e.getY())) {
+                //exit the game activity and go to main menu
                 System.out.println("Main pressed!");
                 ((GameUI)getContext()).finish();
             }
@@ -452,16 +584,23 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         if(effectPause) {
             paint.setTextSize(width / 20);
             if (firstRect.contains((int) e.getX(), (int) e.getY())) {
+                //get a random effect
                 System.out.println("Yes pressed!");
-                Effect effect = Effect.getRandomEffect();
+//                effect = Effect.getRandomEffect();
+                effect = Effect.BALL_MULTIPLE;
                 switch (effect) {
+                    //apply the effect
                     case BALL_BIG:
                         ballRadius = goalRadius;
-                        ball.setRadius(ballRadius);
+                        for(Ball ball: balls) {
+                            ball.setRadius(ballRadius);
+                        }
                         break;
                     case BALL_SMALL:
                         ballRadius *= 0.7;
-                        ball.setRadius(ballRadius);
+                        for(Ball ball: balls) {
+                            ball.setRadius(ballRadius);
+                        }
                         break;
                     case GOAL_BIG:
                         goalRadius *= 1.5;
@@ -471,15 +610,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                         goalRadius = ballRadius;
                         goal.setRadius(goalRadius);
                         break;
+                    case BALL_MULTIPLE:
+                        balls.clear();
                     default:
                         break;
                 }
-                Toast.makeText(this.getContext(), effect.getDescription(), Toast.LENGTH_SHORT).show();
-                round = 5;
+                Toast.makeText(this.getContext(), effect.getDescription(), Toast.LENGTH_SHORT).show();//inform the player on the effect applied
+                round = 5;//make the effect lasts for 5 rounds
                 effectPause = false;
                 response = true;
             }
             if (secondRect.contains((int) e.getX(), (int) e.getY())) {
+                //don't apply effect
                 System.out.println("No pressed!");
                 Toast.makeText(this.getContext(), "No change has been made.", Toast.LENGTH_SHORT).show();
                 effectPause = false;
@@ -488,12 +630,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             return true;
         }
 
-        if(pauseRect.contains((int) e.getX(), (int) e.getY())){
+        if(pauseRect.contains((int) e.getX(), (int) e.getY())){//checks if pause button is pressed
             pause = true;
             return true;
         }
 
-        if(pause){
+        if(pause){//if pause button is pressed
             if(firstRect.contains((int) e.getX(), (int) e.getY())){
                 //turn music on and off
                 if(MenuUI.music.isPlaying()){
@@ -506,12 +648,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
 
             }
             if(secondRect.contains((int) e.getX(), (int) e.getY())){
+                //go back to main
                 System.out.println("Main pressed!");
                 ((GameUI)getContext()).finish();
             }
 
+            //if player pressed outside the pop up menu
             if(!outerRect.contains((int) e.getX(), (int) e.getY())){
-                pause = false;
+                pause = false;//close the menu
             }
             return true;
         }
