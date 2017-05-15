@@ -106,10 +106,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         goal = createGoal();//create a goal
         bars = new ArrayList<>();
         bars.add(new Bar(0, 0, width / 20, height / 2));
-        bars.add(new Bar(width - (width/20) - 2,0,width/20,height/2));
+//        bars.add(new Bar(width - (width/20) - 2,0,width/20,height/2));
+//        bars.add(new Bar(0,height/2,width/5, width/20));
 
         bars.get(0).setSpeedY(15);
-        bars.get(1).setSpeedY(15);
+//        bars.get(1).setSpeedY(15);
+//        bars.get(0).setSpeedX(15);
 
         gameOver = false;
         effectPause = false;

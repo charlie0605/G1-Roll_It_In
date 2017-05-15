@@ -73,21 +73,40 @@ public class Bar extends GameObject{
         }
     }
     public void checkCollision(Ball ball){
+//        if(ball.getX() > getX()) {//check if the ball is on the right of the bar
+//            if (ball.getBound().left <= getBound().right) {//check for collision at ball left and bar right
+//                if (ball.getBound().bottom >= getBound().top && ball.getBound().top <= getBound().bottom) {
+//                    ball.setX(getBound().right + ball.getRadius());
+//                    ball.setSpeedX(ball.getSpeedX() * -1);
+//                }
+//            }
+//
+//            if (ball.getBound().top >= getBound().bottom) {//check for collision at ball top and bar bottom
+//
+//            }
+//        }
+
         if(ball.getBound().intersect(getBound())){
-//            ball.setSpeedY(ball.getSpeedY()*-1);
-            if(ball.getX() > getX()) {
-                //check if the ball is on the right of the bar
-                if (ball.getBound().left <= getBound().right) {  //check if the ball is over the line
-                    ball.setX(getBound().right + ball.getRadius());
-                    ball.setSpeedX(ball.getSpeedX() * -1);
-                }
-            }else if(ball.getX()< getX()){
-                if(ball.getBound().right >= getBound().left){
-                    ball.setX(getBound().left - ball.getRadius());
-                    ball.setSpeedX(ball.getSpeedX() * -1);
-                }
+            if(ball.getBound().left <= getBound().right){
+
             }
         }
+
+
+//        if(ball.getBound().intersect(getBound())){
+////            ball.setSpeedY(ball.getSpeedY()*-1);
+//            if(ball.getX() > getX()) { //check if the ball is on the right of the bar
+//                if (ball.getBound().left <= getBound().right) {  //check if the ball is over the line
+////                    ball.setX(getBound().right + ball.getRadius());
+//                    ball.setSpeedX(ball.getSpeedX() * -1);
+//                }
+//            }else if(ball.getX()< getX()){
+//                if(ball.getBound().right >= getBound().left){
+////                    ball.setX(getBound().left - ball.getRadius());
+//                    ball.setSpeedX(ball.getSpeedX() * -1);
+//                }
+//            }
+//        }
     }
 
     public Rect getBound() {
