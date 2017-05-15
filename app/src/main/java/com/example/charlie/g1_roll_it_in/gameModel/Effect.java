@@ -13,7 +13,9 @@ public enum Effect {
     BALL_BIG(1, "Oh no, the ball gets bigger."),
     BALL_SMALL(2, "Great, the ball gets smaller."),
     GOAL_BIG(3, "Great, the goal gets bigger."),
-    GOAL_SMALL(4, "Oh no, the goal gets smaller.");
+    GOAL_SMALL(4, "Oh no, the goal gets smaller."),
+    BALL_MULTIPLE(5, "Oh no, must score all balls to go to next level."),
+    GOAL_MULTIPLE(6, "Great, ball can go in any goal.");
 
     //variables-------------------------------------------------------------------------------------
     private int id;
