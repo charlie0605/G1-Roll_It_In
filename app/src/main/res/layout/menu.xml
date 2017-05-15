@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/linearLayout"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true">
 
@@ -40,8 +40,7 @@
             android:textColor="#FFFFFF"
             android:background="@drawable/buttonshape"
             android:shadowColor="#A8A8A8"
-            android:shadowDx="20"
-            android:shadowDy="5"
+
             android:shadowRadius="5"
 
             android:layout_width="250dp"
@@ -56,12 +55,11 @@
             android:textColor="#FFFFFF"
             android:background="@drawable/buttonshape"
             android:shadowColor="#A8A8A8"
-            android:shadowDx="20"
-            android:shadowDy="5"
+
             android:shadowRadius="5"
 
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
             android:text="Instruction" />
 
         <Button
@@ -70,13 +68,25 @@
             android:textColor="#FFFFFF"
             android:background="@drawable/buttonshape"
             android:shadowColor="#A8A8A8"
-            android:shadowDx="20"
-            android:shadowDy="5"
+
             android:shadowRadius="5"
 
+            android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Leaderboard" />
+
+        <Button
+            android:id="@+id/achievementBtn"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#A8A8A8"
+
+            android:shadowRadius="5"
+
+            android:text="Achievement"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 
     <TextView
