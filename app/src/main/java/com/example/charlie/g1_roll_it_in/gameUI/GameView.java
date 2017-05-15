@@ -104,7 +104,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         goal = createGoal();//create a goal
         bars = new ArrayList<>();
         bars.add(new Bar(0, 0, width / 20, height / 2));
+        bars.add(new Bar(width - (width/20) - 2,0,width/20,height/2));
+
         bars.get(0).setSpeedY(15);
+        bars.get(1).setSpeedY(15);
+
         gameOver = false;
         effectPause = false;
         response = false;
@@ -223,6 +227,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         return new Goal(width / 2, (int)(goalRadius * 2), goalRadius);
     }
 
+
+    public void barChecking(){
+        if(ball.getBound().intersect(bars.get(0).getBound())){
+//            ball.setSpeedY(ball.getSpeedY()*-1);
+            if(ball.getX()< bars.get(0).getX())
+            ball.setSpeedX(ball.getSpeedX() *-1);
+        }
+    }
     /**
      * Updates different game objects
      */
@@ -230,11 +242,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         if(!gameOver && !effectPause) {//if it's not game over and not every 10th iteration
             if(!pause) {//if the game isn't paused
                 player.update();
+
                 goal.update(player);
                 goal.update();
-                for(Bar bar : bars){
-                    bar.update();
-                }
+
+
+
 
 //                if(ball.getX() <= bars.get(0).getX() ){
 //                    ball.setSpeedX((ball.getSpeedX()* -1));
@@ -246,6 +259,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
 ////                    }
 //                }
                 if (ball != null) {//if ball is not disappearing
+                    for(Bar bar : bars){
+                        bar.checkCollision(ball);
+                        bar.update();
+                    }
+
                     if (round <= 0) {//if there's no effect activating, set the radius of the ball and goal to default value
                         ballRadius = width / 10;
                         ball.setRadius(ballRadius);

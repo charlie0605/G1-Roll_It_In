@@ -3,6 +3,8 @@ package com.example.charlie.g1_roll_it_in.gameModel;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.support.constraint.solver.widgets.Rectangle;
 
 import com.example.charlie.g1_roll_it_in.gameUI.GameView;
 
@@ -38,6 +40,8 @@ public class Bar extends GameObject{
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL);
         canvas.drawRoundRect(x+2, y, x + width, y + height, 100,100, paint);
+//        paint.setColor(Color.BLUE);
+//        canvas.drawRect(getBound(),paint);
     }
 
     public void checkScreenCollision(){
@@ -68,5 +72,28 @@ public class Bar extends GameObject{
             }
         }
     }
+    public void checkCollision(Ball ball){
+        if(ball.getBound().intersect(getBound())){
+//            ball.setSpeedY(ball.getSpeedY()*-1);
+            if(ball.getX() > getX()) {
+                //check if the ball is on the right of the bar
+                if (ball.getBound().left <= getBound().right) {  //check if the ball is over the line
+                    ball.setX(getBound().right + ball.getRadius());
+                    ball.setSpeedX(ball.getSpeedX() * -1);
+                }
+            }else if(ball.getX()< getX()){
+                if(ball.getBound().right >= getBound().left){
+                    ball.setX(getBound().left - ball.getRadius());
+                    ball.setSpeedX(ball.getSpeedX() * -1);
+                }
+            }
+        }
+    }
+
+    public Rect getBound() {
+        return new Rect((int)x +2,(int)y,(int)(x+width +20),(int)(y+height));
+    }
+
+
     //----------------------------------------------------------------------------------------------
 }
