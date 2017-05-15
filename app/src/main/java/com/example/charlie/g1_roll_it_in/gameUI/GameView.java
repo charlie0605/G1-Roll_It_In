@@ -229,14 +229,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         return new Goal(width / 2, (int)(goalRadius * 2), goalRadius);
     }
 
-
-    public void barChecking(){
-        if(ball.getBound().intersect(bars.get(0).getBound())){
-//            ball.setSpeedY(ball.getSpeedY()*-1);
-            if(ball.getX()< bars.get(0).getX())
-            ball.setSpeedX(ball.getSpeedX() *-1);
-        }
-    }
     /**
      * Updates different game objects
      */
@@ -248,39 +240,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 goal.update(player);
                 goal.update();
 
-
-
-
-//                if(ball.getX() <= bars.get(0).getX() ){
-//                    ball.setSpeedX((ball.getSpeedX()* -1));
-////                    if(y < radius) {
-////                        y = (int) radius;
-////                    }
-////                    if(y > GameView.height - radius){
-////                        y = (int) (GameView.height - radius);
-////                    }
-//                }
-                if (ball != null) {//if ball is not disappearing
-                    for(Bar bar : bars){
-                        bar.checkCollision(ball);
-                        bar.update();
-                    }
-
-                    if (round <= 0) {//if there's no effect activating, set the radius of the ball and goal to default value
-                        ballRadius = width / 10;
-                        ball.setRadius(ballRadius);
-                        goalRadius = width / 7;
-                        goal.setRadius(goalRadius);
-                    }
-                    if (checkForGoal()) {//if there's a goal
-                        Message msg = handler.obtainMessage();
-                        msg.what = 0;
-                        handler.sendMessage(msg);//call a feedback
-                for(Bar bar : bars){
-                    bar.update();
-                }
                 for(Ball ball : balls) {
                     if (ball != null) {//if ball is not disappearing
+                        for(Bar bar : bars){
+                            bar.checkCollision(ball);
+                            bar.update();
+                        }
+
                         if (round <= 0) {//if there's no effect activating, set the radius of the ball and goal to default value
                             ballRadius = width / 10;
                             ball.setRadius(ballRadius);
@@ -299,6 +265,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                         } else {
                             ball.update();
                         }
+
                         if (ball.isOut()) {//if ball is out
                             Message msg = handler.obtainMessage();
                             msg.what = 1;
@@ -310,8 +277,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                             writingToFile();//update the text file with the new score
                         }
                     }
-
-
                 }
 
                 if(balls.isEmpty()){//if ball disappears or is goaled
@@ -321,10 +286,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                         balls.add(createBallAtRandomX());
                     }
                 }
+
                 //pause the game at every 10th iteration
                 if (player.getScore() > 0 && player.getScore() % 10 == 0 && !response) {
                     effectPause = true;
                 }
+
                 //update the response
                 if (player.getScore() % 10 != 0) {
                     response = false;
@@ -427,10 +394,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         if(xDiff <= radiusDiff  && yDiff <= radiusDiff){//goal
 //            ball = null;
             balls.remove(ball);
-            if(round > 0){
-                round--;
-                if(round == 0){
-                    handler.sendMessage(handler.obtainMessage(2));//calls for a feedback
+            if(balls.isEmpty()) {
+                if (round > 0) {
+                    round--;
+                    if (round == 0) {
+                        handler.sendMessage(handler.obtainMessage(2));//calls for a feedback
+                    }
                 }
             }
             return true;
@@ -479,7 +448,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             }
 
             fo.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -511,7 +479,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 }
             }
         }
-
     }
     //----------------------------------------------------------------------------------------------
 
@@ -557,7 +524,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         for(Ball ball: balls) {
-            if (ball != null) {//check if the ball exists
+            if(ball.getBound().contains((int) e1.getX(), (int) e1.getY())){
+//            if (ball != null) {//check if the ball exists
                 if (!ball.isTouched()) {
                     //for debugging
                     System.out.println("Before scaling:");
@@ -603,6 +571,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 goalRadius = width / 7;
                 goal = createGoal();
                 round = 0;
+                effect = null;
             }
             if (secondRect.contains((int) e.getX(), (int) e.getY())) {
                 //exit the game activity and go to main menu
