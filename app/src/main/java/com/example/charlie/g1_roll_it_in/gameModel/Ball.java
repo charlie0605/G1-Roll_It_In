@@ -1,6 +1,10 @@
 package com.example.charlie.g1_roll_it_in.gameModel;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.support.constraint.solver.widgets.Rectangle;
 
 import com.example.charlie.g1_roll_it_in.gameUI.GameView;
 
@@ -184,9 +188,21 @@ public class Ball extends RoundObject{
      * @return
      */
     public float getScale(float speedX, float speedY) {
-        float vTarget = 100;
+        float vTarget = GameView.width / 14;
         double v = Math.sqrt((speedX * speedX) + (speedY * speedY));//actual speed of the swipe gesture
         return vTarget / (float) v;
     }
+
+    public Rect getBound() {
+                //left, top, right, bottom
+        return new Rect((int)(x- radius),(int)(y-radius),(int)(x+radius),(int)(y+radius));
+    }
+
+//    public void draw(Canvas canvas){
+//        super.draw(canvas);
+//        Paint paint = new Paint();
+//        paint.setColor(Color.CYAN);
+//        canvas.drawRect(getBound(), paint);
+//    }
     //----------------------------------------------------------------------------------------------
 }
