@@ -32,7 +32,11 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -51,9 +55,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     private int color;
     private ArrayList<Ball> balls;
     private Goal goal;
+//    private ArrayList<Player> players;
     private Player player;
     private ArrayList<Bar> bars;
-    private HashMap<String,Integer> playersMap;
+    private HashMap<String,Player> playersMap;
     private boolean gameOver, effectPause, response, pause;
     private RectF outerRect;
     private Rect secondRect, firstRect, pauseRect;
@@ -102,6 +107,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         round = 0;
         balls = new ArrayList<>();
         balls.add(createBallAtCenterX());
+//        players = new ArrayList<>();
         player = new Player(playerName);//create a player
         goal = createGoal();//create a goal
         bars = new ArrayList<>();
@@ -165,7 +171,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
 
         //update the highscore of the player if their name exists in the file
         if(playersMap.containsKey(player.getName())){
-            player.setHighScore(playersMap.get(player.getName()));
+            player.setHighScore(playersMap.get(player.getName()).getHighScore());
         }
     }
     //----------------------------------------------------------------------------------------------
@@ -272,8 +278,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                             handler.sendMessage(msg);//call a feedback
 
                             gameOver = true;//confirm game over
-                            if (!playersMap.containsKey(player.getName()) || playersMap.get(player.getName()) < player.getHighScore())
-                                playersMap.put(player.getName(), player.getHighScore());
+                            if (!playersMap.containsKey(player.getName()) || playersMap.get(player.getName()).getHighScore() < player.getHighScore())
+                                playersMap.put(player.getName(), player);
                             writingToFile();//update the text file with the new score
                         }
                     }
@@ -442,10 +448,24 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         try {
             FileOutputStream fo = new FileOutputStream(file);
 
-            for(Map.Entry<String, Integer> entry: playersMap.entrySet()) {
-                playerInfo = entry.getKey() + " " + entry.getValue() + "\n";
-                fo.write(playerInfo.toString().getBytes());
+            List<Player> playersByScore = new ArrayList<>(playersMap.values());
+
+            Collections.sort(playersByScore, new Comparator<Player>() {
+                @Override
+                public int compare(Player o1, Player o2) {
+                    return o2.getHighScore() - o1.getHighScore();
+                }
+            });
+
+            for(Player player: playersByScore){
+                System.out.println(player.getName() + "\t" + player.getHighScore());
+                playerInfo = player.getName() + " " + player.getHighScore() + "\n";
+                fo.write(playerInfo.getBytes());
             }
+//            for(Map.Entry<String, Player> entry: playersMap.entrySet()) {
+//                playerInfo = entry.getKey() + " " + entry.getValue().getHighScore() + "\n";
+//                fo.write(playerInfo.toString().getBytes());
+//            }
 
             fo.close();
         } catch (IOException e) {
@@ -465,7 +485,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             String[] splitLine;
             while ((line = in.readLine()) != null) {
                 splitLine = line.split(" ");
-                playersMap.put(splitLine[0], Integer.valueOf(splitLine[1]));
+                Player player = new Player(splitLine[0]);
+                player.setHighScore(Integer.valueOf(splitLine[1]));
+//                players.add(player);
+                playersMap.put(player.getName(), player);
             }
         } catch (IOException e) {
             e.printStackTrace();
