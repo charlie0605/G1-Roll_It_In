@@ -94,56 +94,56 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
 
         //get touchscreen input, so gesture detector can be used
         setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                gestureDetector.onTouchEvent(event);
-                return true;
-            }
-        });
-        color = getRandomColor();
-        playersMap = new HashMap<>();
-        ballRadius = width / 10;
-        goalRadius = width / 7;
-        round = 0;
-        balls = new ArrayList<>();
-        balls.add(createBallAtCenterX());
-//        players = new ArrayList<>();
-        player = new Player(playerName);//create a player
-        goal = createGoal();//create a goal
-        bars = new ArrayList<>();
-        bars.add(new Bar(0, 0, width / 20, height / 2));
-        bars.add(new Bar(width - (width/20) - 2,0,width/20,height/2));
-
-        bars.get(0).setSpeedY(15);
-        bars.get(1).setSpeedY(15);
-
-        gameOver = false;
-        effectPause = false;
-        response = false;
-        pause = false;
-        pauseRect = new Rect(width * 9 / 10, 0, width, width / 10);
-        paint = new TextPaint();
-        player.setScore(9);
-
-        File dir = new File(path);
-        if(!dir.exists()){
-            dir.mkdir();
-        }
-
-        readFile();//read files to create score map
-        handler = new Handler(){//a handler to create toast for feedbacks
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                Toast myToast = null;
-                if(msg.what==0){
-                    myToast = Toast.makeText(getContext(), getEmojiByUnicode(0x1F44D), Toast.LENGTH_SHORT);
-                    if(goal.getX() > width / 2){
-                        myToast.setGravity(Gravity.TOP, (int) (-width / 5), 0);
-                    } else {
-                        myToast.setGravity(Gravity.TOP, (int) (width / 5), 0);
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        gestureDetector.onTouchEvent(event);
+                        return true;
                     }
+                });
+                color = getRandomColor();
+                playersMap = new HashMap<>();
+                ballRadius = width / 10;
+                goalRadius = width / 7;
+                round = 0;
+                balls = new ArrayList<>();
+                balls.add(createBallAtCenterX());
+//        players = new ArrayList<>();
+                player = new Player(playerName);//create a player
+                goal = createGoal();//create a goal
+                bars = new ArrayList<>();
+                bars.add(new Bar(0, 0, width / 20, height / 2));
+                bars.add(new Bar(width - (width/20) - 2,0,width/20,height/2));
+
+                bars.get(0).setSpeedY(15);
+                bars.get(1).setSpeedY(15);
+
+                gameOver = false;
+                effectPause = false;
+                response = false;
+                pause = false;
+                pauseRect = new Rect(width * 9 / 10, 0, width, width / 10);
+                paint = new TextPaint();
+                player.setScore(9);
+
+                File dir = new File(path);
+                if(!dir.exists()){
+                    dir.mkdir();
                 }
+
+                readFile();//read files to create score map
+                handler = new Handler(){//a handler to create toast for feedbacks
+                    @Override
+                    public void handleMessage(Message msg) {
+                        super.handleMessage(msg);
+                        Toast myToast = null;
+                        if(msg.what==0){
+                            myToast = Toast.makeText(getContext(), getEmojiByUnicode(0x1F44D), Toast.LENGTH_SHORT);
+                            if(goal.getX() > width / 2){
+                                myToast.setGravity(Gravity.TOP, (int) (-width / 5), 0);
+                            } else {
+                                myToast.setGravity(Gravity.TOP, (int) (width / 5), 0);
+                            }
+                        }
                 if(msg.what==1){
                     myToast = Toast.makeText(getContext(), getEmojiByUnicode(0x1F613), Toast.LENGTH_SHORT);
                     if(goal.getX() > width / 2){
