@@ -60,7 +60,7 @@ public class LeaderboardUI extends Activity{
             br = new BufferedReader(new FileReader(file));
             String line = "";
             int number = 1;
-            while((line = br.readLine())!=null && number <= 5){
+            while((line = br.readLine())!=null && number <= 10){
                 sb.append(number++ + "       " +line + "\n");
             }
             br.close();
