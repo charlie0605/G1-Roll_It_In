@@ -54,8 +54,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     private MainThread thread;
     private int color;
     private ArrayList<Ball> balls;
-    private Goal goal;
-//    private ArrayList<Player> players;
+    private ArrayList<Goal> goals;
     private Player player;
     private ArrayList<Bar> bars;
     private HashMap<String,Player> playersMap;
@@ -109,7 +108,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         balls.add(createBallAtCenterX());
 //        players = new ArrayList<>();
         player = new Player(playerName);//create a player
-        goal = createGoal();//create a goal
+        goals = new ArrayList<>();
+        goals.add(createGoal());//create a goal
         bars = new ArrayList<>();
         bars.add(new Bar(0, 0, width / 20, height / 2));
         bars.add(new Bar(width - (width/20) - 2,0,width/20,height/2));
@@ -138,18 +138,22 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 Toast myToast = null;
                 if(msg.what==0){
                     myToast = Toast.makeText(getContext(), getEmojiByUnicode(0x1F44D), Toast.LENGTH_SHORT);
-                    if(goal.getX() > width / 2){
-                        myToast.setGravity(Gravity.TOP, (int) (-width / 5), 0);
-                    } else {
-                        myToast.setGravity(Gravity.TOP, (int) (width / 5), 0);
+                    if(!goals.isEmpty()) {
+                        if (goals.get(0).getX() > width / 2) {
+                            myToast.setGravity(Gravity.TOP, (int) (-width / 5), 0);
+                        } else {
+                            myToast.setGravity(Gravity.TOP, (int) (width / 5), 0);
+                        }
                     }
                 }
                 if(msg.what==1){
                     myToast = Toast.makeText(getContext(), getEmojiByUnicode(0x1F613), Toast.LENGTH_SHORT);
-                    if(goal.getX() > width / 2){
-                        myToast.setGravity(Gravity.TOP, (int) (-width / 5), 0);
-                    } else {
-                        myToast.setGravity(Gravity.TOP, (int) (width / 5), 0);
+                    if(!goals.isEmpty()) {
+                        if (goals.get(0).getX() > width / 2) {
+                            myToast.setGravity(Gravity.TOP, (int) (-width / 5), 0);
+                        } else {
+                            myToast.setGravity(Gravity.TOP, (int) (width / 5), 0);
+                        }
                     }
                 }
                 if(msg.what==2) {
@@ -243,8 +247,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             if(!pause) {//if the game isn't paused
                 player.update();
 
-                goal.update(player);
-                goal.update();
+                for(Goal goal : goals) {
+                    goal.update(player);
+                    goal.update();
+                }
 
                 for(Ball ball : balls) {
                     if (ball != null) {//if ball is not disappearing
@@ -257,7 +263,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                             ballRadius = width / 10;
                             ball.setRadius(ballRadius);
                             goalRadius = width / 7;
-                            goal.setRadius(goalRadius);
+                            goals.get(0).setRadius(goalRadius);
                         }
 
                         if (checkForGoal(ball)) {//if there's a goal
@@ -319,7 +325,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     public void draw(Canvas canvas){
         super.draw(canvas);
         canvas.drawColor(color);//draw a random colored background
-        goal.draw(canvas);
+
+        for(Goal goal : goals){
+            goal.draw(canvas);
+        }
         for(Bar bar : bars){
             bar.draw(canvas);
         }
@@ -391,27 +400,30 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
      * @return true if there is a goal and false if otherwise
      */
     public boolean checkForGoal(Ball ball){
-        float xDiff = Math.abs(goal.getX() - ball.getX());
-        float yDiff = Math.abs(goal.getY() - ball.getY());
-        float delta = ball.getRadius() / 2;
-        float radiusDiff = goal.getRadius() - ball.getRadius() + delta;
+        for(Goal goal: goals) {
+            float xDiff = Math.abs(goal.getX() - ball.getX());
+            float yDiff = Math.abs(goal.getY() - ball.getY());
+            float delta = ball.getRadius() / 2;
+            float radiusDiff = goal.getRadius() - ball.getRadius() + delta;
 
-        //checks the difference in radius of the ball and goal objects
-        if(xDiff <= radiusDiff  && yDiff <= radiusDiff){//goal
-//            ball = null;
-            balls.remove(ball);
-            if(balls.isEmpty()) {
-                if (round > 0) {
-                    round--;
-                    if (round == 0) {
-                        handler.sendMessage(handler.obtainMessage(2));//calls for a feedback
+            //checks the difference in radius of the ball and goal objects
+            if (xDiff <= radiusDiff && yDiff <= radiusDiff) {//goal
+                //            ball = null;
+                balls.remove(ball);
+                if (balls.isEmpty()) {
+                    if (round > 0) {
+                        round--;
+                        if (round == 0) {
+                            handler.sendMessage(handler.obtainMessage(2));//calls for a feedback
+                        }
                     }
                 }
+                return true;
+            } else {
+                return false;
             }
-            return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -592,7 +604,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 balls.clear();
                 balls.add(createBallAtCenterX());
                 goalRadius = width / 7;
-                goal = createGoal();
+                goals.clear();
+                goals.add(createGoal());
                 round = 0;
                 effect = null;
             }
@@ -627,11 +640,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                         break;
                     case GOAL_BIG:
                         goalRadius *= 1.5;
-                        goal.setRadius(goalRadius);
+                        for(Goal goal: goals) {
+                            goal.setRadius(goalRadius);
+                        }
                         break;
                     case GOAL_SMALL:
                         goalRadius = ballRadius;
-                        goal.setRadius(goalRadius);
+                        for(Goal goal: goals) {
+                            goal.setRadius(goalRadius);
+                        }
                         break;
                     case BALL_MULTIPLE:
                         balls.clear();
