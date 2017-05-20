@@ -105,8 +105,8 @@ public class Ball extends RoundObject{
         super.update();
 
         //will check for collision with the bars instead later on
-//        checkScreenCollisionLeftRight();
-//        checkScreenCollisionTopBottom();
+        checkScreenCollisionLeftRight();
+        checkScreenCollisionTopBottom();
 
         //check if ball is out
         checkBallOutTopBottom();

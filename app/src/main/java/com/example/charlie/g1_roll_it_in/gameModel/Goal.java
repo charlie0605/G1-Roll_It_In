@@ -41,18 +41,15 @@ public class Goal extends RoundObject{
      *  Updates the speed of goal according to the player's score
      */
     public void update(Player player) {
-        if (player.getScore() == 20) {
-            if(!updatedSpeed) {
+        if(player.getScore() >= 20){
+            if(Math.abs(this.getSpeedX()) != 30){
                 this.setSpeedX(30);
-                updatedSpeed = true;
             }
-        } else if (player.getScore() == 10) {
-            if(!updatedSpeed) {
+        }
+        else if(player.getScore() >= 10){
+            if(Math.abs(this.getSpeedX()) != 15) {
                 this.setSpeedX(15);
-                updatedSpeed = true;
             }
-        } else {
-            updatedSpeed = false;
         }
     }
     //----------------------------------------------------------------------------------------------

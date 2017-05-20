@@ -247,8 +247,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             if(!pause) {//if the game isn't paused
                 player.update();
 
+                System.out.println(goals.get(0).getSpeedX());
+                if(effect == Effect.GOAL_MULTIPLE){
+                    createThreeGoals();
+                } else {
+                    if(goals.size() == 3){
+                        goals.clear();
+                        goals.add(createGoal());
+                    }
+                }
                 for(Goal goal : goals) {
-                    goal.update(player);
+                    if(goals.size() == 1) {
+                        goal.update(player);
+                    }
                     goal.update();
                 }
 
@@ -313,9 +324,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     }
 
     private void createThreeBalls() {
+        balls.clear();
         balls.add(new Ball(ballRadius * 2, height - width / 5, ballRadius));
         balls.add(new Ball(width - ballRadius * 2, height - width / 5, ballRadius));
         balls.add(new Ball(width  / 2, height - width / 5, ballRadius));
+    }
+
+    private void createThreeGoals() {
+        goals.clear();
+        goals.add(new Goal(width / 7, (int) (goalRadius * 2), goalRadius));
+        goals.add(createGoal());
+        goals.add(new Goal(width - width / 7, (int) (goalRadius * 2), goalRadius));
     }
 
     /**
@@ -415,12 +434,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                         round--;
                         if (round == 0) {
                             handler.sendMessage(handler.obtainMessage(2));//calls for a feedback
+                            effect = null;
                         }
                     }
                 }
                 return true;
-            } else {
-                return false;
             }
         }
         return false;
@@ -623,7 +641,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 //get a random effect
                 System.out.println("Yes pressed!");
 //                effect = Effect.getRandomEffect();
-                effect = Effect.BALL_MULTIPLE;
+                effect = Effect.GOAL_MULTIPLE;
                 switch (effect) {
                     //apply the effect
                     case BALL_BIG:
