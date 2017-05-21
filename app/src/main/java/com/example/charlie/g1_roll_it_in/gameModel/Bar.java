@@ -91,26 +91,40 @@ public class Bar extends GameObject{
 
         if(ball.getBound().intersect(getBound())){
             if(ball.getBound().left <= getBound().right || ball.getBound().right >= getBound().left){
-                ball.setSpeedX(ball.getSpeedX() * -1);
                 if(ball.getBound().left >= getBound().left && !ball.isBounceRight()){//ball is on the right of the bar
+                    ball.setSpeedX(ball.getSpeedX() * -1);
                     ball.setX(getBound().right + ball.getRadius());
                     ball.setBounceRight(true);
                     ball.setBounceLeft(false);
+                    ball.setBounceTop(true);
+                    ball.setBounceBottom(true);
                 }
                 if(ball.getBound().right <= getBound().right && !ball.isBounceLeft()){//ball is on the left of the bar
+                    ball.setSpeedX(ball.getSpeedX() * -1);
                     ball.setX(getBound().left - ball.getRadius());
                     ball.setBounceLeft(true);
                     ball.setBounceRight(false);
+                    ball.setBounceTop(true);
+                    ball.setBounceBottom(true);
                 }
             }
-            if(ball.getBound().top >= getBound().bottom || ball.getBound().bottom <= getBound().top){
-                ball.setSpeedY(ball.getSpeedY() * -1);
-//                if(ball.getBound().top <= getBound().top){
-//                    ball.setY(getBound().bottom + ball.getRadius());
-//                }
-//                if(ball.getBound().bottom >= getBound().bottom){
-//                    ball.setY(getBound().top - ball.getRadius());
-//                }
+            if(ball.getBound().top <= getBound().bottom || ball.getBound().bottom >= getBound().top){
+                if(ball.getBound().top <= getBound().top && !ball.isBounceTop()){//ball on top of bar
+                    ball.setSpeedY(ball.getSpeedY() * -1);
+                    ball.setY(getBound().top - ball.getRadius());
+                    ball.setBounceTop(true);
+                    ball.setBounceBottom(false);
+                    ball.setBounceLeft(false);
+                    ball.setBounceRight(false);
+                }
+                if(ball.getBound().bottom >= getBound().bottom && !ball.isBounceBottom()){//ball at bottom of bar
+                    ball.setSpeedY(ball.getSpeedY() * -1);
+                    ball.setY(getBound().bottom + ball.getRadius());
+                    ball.setBounceBottom(true);
+                    ball.setBounceTop(false);
+                    ball.setBounceLeft(false);
+                    ball.setBounceRight(false);
+                }
             }
         }
     }
