@@ -76,17 +76,6 @@
             android:layout_height="wrap_content"
             android:text="Leaderboard" />
 
-        <Button
-            android:id="@+id/achievementBtn"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/buttonshape"
-            android:shadowColor="#A8A8A8"
-
-            android:shadowRadius="5"
-
-            android:text="Achievement"
-            android:textColor="#FFFFFF" />
     </LinearLayout>
 
     <TextView
