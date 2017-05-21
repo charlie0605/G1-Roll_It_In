@@ -53,7 +53,7 @@ public abstract class GameObject {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 

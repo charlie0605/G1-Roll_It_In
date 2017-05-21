@@ -18,6 +18,7 @@ public class Ball extends RoundObject{
     //variables-------------------------------------------------------------------------------------
     private boolean out;
     private boolean touched;
+    private boolean bounceRight, bounceLeft, bounceTop, bounceBottom;
     //----------------------------------------------------------------------------------------------
 
     //constructors----------------------------------------------------------------------------------
@@ -69,6 +70,39 @@ public class Ball extends RoundObject{
     public void setTouched(boolean touched) {
         this.touched = touched;
     }
+
+    public boolean isBounceRight() {
+        return bounceRight;
+    }
+
+    public void setBounceRight(boolean bounceRight) {
+        this.bounceRight = bounceRight;
+    }
+
+    public boolean isBounceLeft() {
+        return bounceLeft;
+    }
+
+    public void setBounceLeft(boolean bounceLeft) {
+        this.bounceLeft = bounceLeft;
+    }
+
+    public boolean isBounceTop() {
+        return bounceTop;
+    }
+
+    public void setBounceTop(boolean bounceTop) {
+        this.bounceTop = bounceTop;
+    }
+
+    public boolean isBounceBottom() {
+        return bounceBottom;
+    }
+
+    public void setBounceBottom(boolean bounceBottom) {
+        this.bounceBottom = bounceBottom;
+    }
+
     //----------------------------------------------------------------------------------------------
 
     //helper methods--------------------------------------------------------------------------------
@@ -105,7 +139,7 @@ public class Ball extends RoundObject{
         super.update();
 
         //will check for collision with the bars instead later on
-        checkScreenCollisionLeftRight();
+//        checkScreenCollisionLeftRight();
         checkScreenCollisionTopBottom();
 
         //check if ball is out
