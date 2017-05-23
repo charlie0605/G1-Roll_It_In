@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.constraint.solver.widgets.Rectangle;
 
 import com.example.charlie.g1_roll_it_in.gameUI.GameView;
 
@@ -12,16 +11,17 @@ import com.example.charlie.g1_roll_it_in.gameUI.GameView;
  * Created by Thong on 5/04/2017.
  */
 
-public class Bar extends GameObject{
+public class Bar extends GameObject {
     //variables-------------------------------------------------------------------------------------
-    private int width, height;
+    private int width;
+    private int height;
     //----------------------------------------------------------------------------------------------
 
     //constructor-----------------------------------------------------------------------------------
-    public Bar(int x, int y, int width, int height){
+    public Bar(int x, int y, int width, int height) {
         super(x, y);
-        this.width = width;
-        this.height = height;
+        this.setWidth(width);
+        this.setHeight(height);
     }
     //----------------------------------------------------------------------------------------------
 
@@ -31,48 +31,50 @@ public class Bar extends GameObject{
         x += speedX;
         y += speedY;
         checkScreenCollision();
+        System.out.println(this.getSpeedX());
     }
 
     @Override
     public void draw(Canvas canvas) {
         Paint paint = new Paint();
         paint.setShadowLayer(10, 0, 0, Color.DKGRAY);
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.argb(255,255,64,129));
         paint.setStyle(Paint.Style.FILL);
-        canvas.drawRoundRect(x+2, y, x + width, y + height, 100,100, paint);
+        canvas.drawRoundRect(x, y, x + getWidth(), y + getHeight(), 100, 100, paint);
 //        paint.setColor(Color.BLUE);
 //        canvas.drawRect(getBound(),paint);
     }
 
-    public void checkScreenCollision(){
+    public void checkScreenCollision() {
         checkScreenCollisionLeftRight();
         checkScreenCollisionTopBottom();
     }
 
-    public void checkScreenCollisionLeftRight(){
-        if(x <= 0 || x >= GameView.width - width){
+    public void checkScreenCollisionLeftRight() {
+        if (x <= 0 || x >= GameView.width - getWidth()) {
             speedX *= -1;
-            if(x < 0) {
+            if (x < 0) {
                 x = 0;
             }
-            if(x > GameView.width - width){
-                x = width;
+            if (x > GameView.width - getWidth()) {
+                x = GameView.width - getWidth();
             }
         }
     }
 
-    public void checkScreenCollisionTopBottom(){
-        if(y <= 0 || y >= GameView.height - height){
+    public void checkScreenCollisionTopBottom() {
+        if (y <= 0 || y >= GameView.height - getHeight()) {
             speedY *= -1;
-            if(y < 0) {
+            if (y < 0) {
                 y = 0;
             }
-            if(y > GameView.height - height){
-                y = height;
+            if (y > GameView.height - getHeight()) {
+                y = getHeight();
             }
         }
     }
-    public void checkCollision(Ball ball){
+
+    public void checkCollision(Ball ball) {
 //        if(ball.getBound().intersect(getBound())){
 ////            ball.setSpeedY(ball.getSpeedY()*-1);
 //            if(ball.getX() > getX()) {
@@ -88,18 +90,19 @@ public class Bar extends GameObject{
 //                }
 //            }
 //        }
-
-        if(ball.getBound().intersect(getBound())){
-            if(ball.getBound().left <= getBound().right || ball.getBound().right >= getBound().left){
-                if(ball.getBound().left >= getBound().left && !ball.isBounceRight()){//ball is on the right of the bar
+        if(this.intersect(ball)){
+//        if (ball.getBound().intersect(getBound())) {
+            System.out.println("bar y: " + getY());
+            if (ball.getY() <= getY() + getHeight() && (ball.getBound().left <= getBound().right || ball.getBound().right >= getBound().left)) {
+                if (ball.getBound().left >= getBound().left && !ball.isBounceRight()) {//ball is on the right of the bar
                     ball.setSpeedX(ball.getSpeedX() * -1);
-                    ball.setX(getBound().right + ball.getRadius());
-                    ball.setBounceRight(true);
+                    ball.setX(getBound().right + ball.getRadius());// set the position of the ball to the right of the bar
+                    ball.setBounceRight(true); //
                     ball.setBounceLeft(false);
                     ball.setBounceTop(true);
                     ball.setBounceBottom(true);
                 }
-                if(ball.getBound().right <= getBound().right && !ball.isBounceLeft()){//ball is on the left of the bar
+                if (ball.getBound().right <= getBound().right && !ball.isBounceLeft()) {//ball is on the left of the bar
                     ball.setSpeedX(ball.getSpeedX() * -1);
                     ball.setX(getBound().left - ball.getRadius());
                     ball.setBounceLeft(true);
@@ -108,8 +111,8 @@ public class Bar extends GameObject{
                     ball.setBounceBottom(true);
                 }
             }
-            if(ball.getBound().top <= getBound().bottom || ball.getBound().bottom >= getBound().top){
-                if(ball.getBound().top <= getBound().top && !ball.isBounceTop()){//ball on top of bar
+            if (ball.getBound().top <= getBound().bottom || ball.getBound().bottom >= getBound().top) {
+                if (ball.getBound().top <= getBound().top && !ball.isBounceTop()) {//ball on top of bar
                     ball.setSpeedY(ball.getSpeedY() * -1);
                     ball.setY(getBound().top - ball.getRadius());
                     ball.setBounceTop(true);
@@ -117,7 +120,7 @@ public class Bar extends GameObject{
                     ball.setBounceLeft(false);
                     ball.setBounceRight(false);
                 }
-                if(ball.getBound().bottom >= getBound().bottom && !ball.isBounceBottom()){//ball at bottom of bar
+                if (ball.getBound().bottom >= getBound().bottom && !ball.isBounceBottom()) {//ball at bottom of bar
                     ball.setSpeedY(ball.getSpeedY() * -1);
                     ball.setY(getBound().bottom + ball.getRadius());
                     ball.setBounceBottom(true);
@@ -129,22 +132,31 @@ public class Bar extends GameObject{
         }
     }
 
-//    public boolean intersect(Ball ball){
-//        if (ball.getBound().left < this.getBound().right + Math.abs(ball.getSpeedX()) && this.getBound().left - Math.abs(ball.getSpeedX()) < ball.getBound().right && ball.getBound().top < this.getBound().bottom + Math.abs(ball.getSpeedY()) && this.getBound().top - Math.abs(ball.getSpeedY()) < ball.getBound().bottom) {
-////            if (ball.getBound().left < this.getBound().left) ball.setX(getBound().left - ball.getRadius());
-////            if (ball.getBound().top < this.getBound().top) ball.setY(getBound().top - ball.getRadius());
-//            if (ball.getBound().right > this.getBound().right) {//ball on the right of bar
-//                ball.setX(getBound().right + ball.getRadius());
-//                ball.setSpeedX(Math.abs(ball.getSpeedX()));//speed x should be positive
-//            }
-////            if (ball.getBound().bottom > this.getBound().bottom) ball.setY(getBound().bottom + ball.getRadius());
-//            return true;
-//        }
-//        return false;
-//    }
+    public boolean intersect(Ball ball) {
+        if (ball.getBound().left < this.getBound().right + Math.abs(ball.getSpeedX() / 2) && this.getBound().left - Math.abs(ball.getSpeedX() / 2) < ball.getBound().right && ball.getBound().top < this.getBound().bottom + Math.abs(ball.getSpeedY() / 2) && this.getBound().top - Math.abs(ball.getSpeedY() / 2) < ball.getBound().bottom) {
+            return true;
+        }
+        return false;
+    }
 
     public Rect getBound() {
-        return new Rect((int)x +2,(int)y,(int)(x+width +20),(int)(y+height));
+        return new Rect((int) x + 2, (int) y, (int) (x + getWidth() + 20), (int) (y + getHeight()));
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
 

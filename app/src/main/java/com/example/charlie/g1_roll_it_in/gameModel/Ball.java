@@ -147,9 +147,19 @@ public class Ball extends RoundObject {
 
         //will check for collision with the bars instead later on
 //        checkScreenCollisionLeftRight();
-        checkScreenCollisionTopBottom();
+//        checkScreenCollisionTopBottom();
 
         //check if ball is out
+        checkBallOutTopBottom();
+        checkBallOutLeftRight();
+    }
+
+    public void update(int score) {
+        super.update();
+        if (score < 10) {
+            checkScreenCollisionLeftRight();
+        }
+
         checkBallOutTopBottom();
         checkBallOutLeftRight();
     }
