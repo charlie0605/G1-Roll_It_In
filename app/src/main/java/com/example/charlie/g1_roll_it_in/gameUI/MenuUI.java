@@ -40,6 +40,7 @@ public class MenuUI extends Activity {
         playPressed();
         musicActionListener();
         instructionBtnListener();
+        leaderboardBtnListener();
     }
 
     /**
@@ -77,6 +78,23 @@ public class MenuUI extends Activity {
                     sound.start();
                 }
                 Intent intent = new Intent(getApplicationContext(),InstructionUI.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    /**
+     * Checks if leaderboard button is pressed
+     */
+    public void leaderboardBtnListener(){
+        Button lbBtn = (Button) findViewById(R.id.leaderboardButton);
+        lbBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if(soundBtn.isChecked()){
+                    sound.start();
+                }
+                Intent intent = new Intent(getApplicationContext(),LeaderboardUI.class);
                 startActivity(intent);
             }
         });
