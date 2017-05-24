@@ -1,6 +1,7 @@
 package com.example.charlie.g1_roll_it_in.gameUI;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
@@ -69,6 +70,7 @@ public class LeaderboardUI extends Activity{
             while((line = br.readLine())!=null && number <= 10){
                 sb.append(line + "\n");
                 playerScores.add(line);
+                number++;
             }
             br.close();
         } catch (FileNotFoundException e) {
@@ -87,18 +89,22 @@ public class LeaderboardUI extends Activity{
             TableRow tbRow0 = new TableRow(this);
             TextView tv0 = new TextView(this);
             tv0.setText("Rank");
+            tv0.setTextColor(Color.parseColor("#FFFF4081"));
             tv0.setTypeface(null, Typeface.BOLD);
+            tv0.setPadding(0,20,0,20);
             tv0.setTextSize(16);
             tv0.setGravity(Gravity.CENTER);
             tbRow0.addView(tv0);
             TextView tv1 = new TextView(this);
             tv1.setText("Name");
             tv1.setTextSize(16);
+            tv1.setTextColor(Color.parseColor("#FFFF4081"));
             tv1.setTypeface(null, Typeface.BOLD);
             tbRow0.addView(tv1);
             TextView tv2 = new TextView(this);
             tv2.setText("Score");
             tv2.setTextSize(16);
+            tv2.setTextColor(Color.parseColor("#FFFF4081"));
             tv2.setTypeface(null, Typeface.BOLD);
             tv2.setGravity(Gravity.CENTER);
             tbRow0.addView(tv2);
@@ -120,7 +126,7 @@ public class LeaderboardUI extends Activity{
                 tvPlayer2.setText(player[1]);
                 tvPlayer2.setGravity(Gravity.CENTER);
                 tbRow.addView(tvPlayer2);
-                tbRow.setPadding(0,0,0,10);
+                tbRow.setPadding(0,0,0,20);
                 tableLayout.addView(tbRow);
             }
         }
