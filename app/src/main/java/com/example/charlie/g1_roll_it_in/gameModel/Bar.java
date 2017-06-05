@@ -41,8 +41,6 @@ public class Bar extends GameObject {
         paint.setColor(Color.argb(255, 255, 64, 129));
         paint.setStyle(Paint.Style.FILL);
         canvas.drawRoundRect(x, y, x + getWidth(), y + getHeight(), 100, 100, paint);
-//        paint.setColor(Color.BLUE);
-//        canvas.drawRect(getBound(),paint);
     }
 
     public void checkScreenCollision() {
@@ -75,23 +73,7 @@ public class Bar extends GameObject {
     }
 
     public void checkCollision(Ball ball) {
-//        if(ball.getBound().intersect(getBound())){
-////            ball.setSpeedY(ball.getSpeedY()*-1);
-//            if(ball.getX() > getX()) {
-//                //check if the ball is on the right of the bar
-//                if (ball.getBound().left <= getBound().right) {  //check if the ball is over the line
-//                    ball.setX(getBound().right + ball.getRadius());
-//                    ball.setSpeedX(ball.getSpeedX() * -1);
-//                }
-//            }else if(ball.getX()< getX()){
-//                if(ball.getBound().right >= getBound().left){
-//                    ball.setX(getBound().left - ball.getRadius());
-//                    ball.setSpeedX(ball.getSpeedX() * -1);
-//                }
-//            }
-//        }
         if (this.intersect(ball)) {
-//        if (ball.getBound().intersect(getBound())) {
             System.out.println("bar y: " + getY());
             if (ball.getY() <= getY() + getHeight() && (ball.getBound().left <= getBound().right || ball.getBound().right >= getBound().left)) {
                 if (ball.getBound().left >= getBound().left && !ball.isBounceRight()) {//ball is on the right of the bar

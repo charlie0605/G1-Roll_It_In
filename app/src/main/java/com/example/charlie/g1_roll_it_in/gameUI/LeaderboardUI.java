@@ -31,16 +31,6 @@ import java.util.ArrayList;
 public class LeaderboardUI extends Activity {
     public String path = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/players";
 
-    /* StringBuffer sb = new StringBuffer();
-     File file = new File(path + "/players.txt");
-     Buffer edReader br = new BufferedReader(new FileReader(file));
-     String line = "";
-     while((line = br.readLine())!=null){
-         sb.append(line);
-     }
-     br.close();
-     (TextView)findViewById(R.id.text1).setText(sb.toString());
- */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +68,6 @@ public class LeaderboardUI extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return playerScores;
     }
 
@@ -130,7 +119,5 @@ public class LeaderboardUI extends Activity {
                 tableLayout.addView(tbRow);
             }
         }
-
-
     }
 }

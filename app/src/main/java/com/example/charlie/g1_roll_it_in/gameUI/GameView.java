@@ -766,7 +766,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             }
             return true;
         }
-
         return false;
     }
 
