@@ -38,7 +38,7 @@ public class Bar extends GameObject {
     public void draw(Canvas canvas) {
         Paint paint = new Paint();
         paint.setShadowLayer(10, 0, 0, Color.DKGRAY);
-        paint.setColor(Color.argb(255,255,64,129));
+        paint.setColor(Color.argb(255, 255, 64, 129));
         paint.setStyle(Paint.Style.FILL);
         canvas.drawRoundRect(x, y, x + getWidth(), y + getHeight(), 100, 100, paint);
 //        paint.setColor(Color.BLUE);
@@ -90,7 +90,7 @@ public class Bar extends GameObject {
 //                }
 //            }
 //        }
-        if(this.intersect(ball)){
+        if (this.intersect(ball)) {
 //        if (ball.getBound().intersect(getBound())) {
             System.out.println("bar y: " + getY());
             if (ball.getY() <= getY() + getHeight() && (ball.getBound().left <= getBound().right || ball.getBound().right >= getBound().left)) {

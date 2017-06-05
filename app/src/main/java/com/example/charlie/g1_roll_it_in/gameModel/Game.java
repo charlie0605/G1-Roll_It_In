@@ -13,7 +13,7 @@ public class Game {
     private ArrayList<Ball> balls;
     private ArrayList<Goal> goals;
 
-    public Game(){
+    public Game() {
 
     }
 }

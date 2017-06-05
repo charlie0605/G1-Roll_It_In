@@ -10,7 +10,7 @@ import android.graphics.Paint;
 
 public abstract class RoundObject extends GameObject {
     //variables-------------------------------------------------------------------------------------
-    protected  float radius;
+    protected float radius;
     protected int color;
     //----------------------------------------------------------------------------------------------
 
@@ -44,7 +44,7 @@ public abstract class RoundObject extends GameObject {
     /**
      * Moves the object
      */
-    public void update(){
+    public void update() {
         //move the object with the speed in x and y direction
         x += speedX;
         y += speedY;
@@ -52,9 +52,10 @@ public abstract class RoundObject extends GameObject {
 
     /**
      * Draws the object onto the canvas
+     *
      * @param canvas
      */
-    public void draw(Canvas canvas){
+    public void draw(Canvas canvas) {
         Paint paint = new Paint();
         paint.setShadowLayer(20, 0, 0, Color.DKGRAY);
         paint.setColor(color);

@@ -26,7 +26,7 @@ public enum Effect {
     //----------------------------------------------------------------------------------------------
 
     //constructor-----------------------------------------------------------------------------------
-    Effect(int id, String description){
+    Effect(int id, String description) {
         this.id = id;
         this.description = description;
     }
@@ -54,6 +54,7 @@ public enum Effect {
 
     /**
      * Returns a random effect out of the list
+     *
      * @return
      */
     public static Effect getRandomEffect() {

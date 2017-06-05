@@ -30,10 +30,10 @@ public class MenuUI extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.menu);
 
-        sound = MediaPlayer.create(MenuUI.this,R.raw.button14);
+        sound = MediaPlayer.create(MenuUI.this, R.raw.button14);
         soundBtn = (Switch) findViewById(R.id.soundSwitch);
         musicBtn = (Switch) findViewById(R.id.musicSwitch);
-        music = MediaPlayer.create(MenuUI.this,R.raw.m1);
+        music = MediaPlayer.create(MenuUI.this, R.raw.m1);
         welcomeMessg = (TextView) findViewById(R.id.welcomMessg);
 
         welcomeMessg.setText("WELCOME\n" + NameUI.playerName);
@@ -46,16 +46,16 @@ public class MenuUI extends Activity {
     /**
      * Checks if the play button is pressed
      */
-    public void playPressed(){
+    public void playPressed() {
         Button playBtn = (Button) findViewById(R.id.playButton);
 
-        playBtn.setOnClickListener(new View.OnClickListener(){
+        playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(soundBtn.isChecked()){
+                if (soundBtn.isChecked()) {
                     sound.start();
                 }
-                Intent intent = new Intent(getApplicationContext(),GameUI.class);
+                Intent intent = new Intent(getApplicationContext(), GameUI.class);
                 startActivity(intent);
             }
         });
@@ -69,15 +69,15 @@ public class MenuUI extends Activity {
     /**
      * Checks if instruction button is pressed
      */
-    public void instructionBtnListener(){
+    public void instructionBtnListener() {
         Button playBtn = (Button) findViewById(R.id.instuctionButton);
-        playBtn.setOnClickListener(new View.OnClickListener(){
+        playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(soundBtn.isChecked()){
+                if (soundBtn.isChecked()) {
                     sound.start();
                 }
-                Intent intent = new Intent(getApplicationContext(),InstructionUI.class);
+                Intent intent = new Intent(getApplicationContext(), InstructionUI.class);
                 startActivity(intent);
             }
         });
@@ -86,30 +86,30 @@ public class MenuUI extends Activity {
     /**
      * Checks if leaderboard button is pressed
      */
-    public void leaderboardBtnListener(){
+    public void leaderboardBtnListener() {
         Button lbBtn = (Button) findViewById(R.id.leaderboardButton);
-        lbBtn.setOnClickListener(new View.OnClickListener(){
+        lbBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(soundBtn.isChecked()){
+                if (soundBtn.isChecked()) {
                     sound.start();
                 }
-                Intent intent = new Intent(getApplicationContext(),LeaderboardUI.class);
+                Intent intent = new Intent(getApplicationContext(), LeaderboardUI.class);
                 startActivity(intent);
             }
         });
     }
 
-    public void musicActionListener(){
-        music = MediaPlayer.create(MenuUI.this,R.raw.m1);
+    public void musicActionListener() {
+        music = MediaPlayer.create(MenuUI.this, R.raw.m1);
         music.start();
         music.setLooping(true);
-        musicBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+        musicBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (musicBtn.isChecked()){
+                if (musicBtn.isChecked()) {
                     music.start();
-                }else{
+                } else {
                     music.pause();
                 }
             }
@@ -119,7 +119,7 @@ public class MenuUI extends Activity {
     @Override
     public void onPause() {
         super.onPause();
-        if(music.isPlaying()) {
+        if (music.isPlaying()) {
             music.pause();
         }
     }
@@ -127,7 +127,7 @@ public class MenuUI extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(!music.isPlaying() && musicBtn.isChecked()) {
+        if (!music.isPlaying() && musicBtn.isChecked()) {
             music.start();
         }
     }

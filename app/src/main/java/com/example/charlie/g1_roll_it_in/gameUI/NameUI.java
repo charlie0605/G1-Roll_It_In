@@ -28,22 +28,22 @@ public class NameUI extends Activity {
         continuePressed();
     }
 
-    public void continuePressed(){
+    public void continuePressed() {
         Button playBtn = (Button) findViewById(R.id.continueBtn);
-        final MediaPlayer sound = MediaPlayer.create(NameUI.this,R.raw.button31);
+        final MediaPlayer sound = MediaPlayer.create(NameUI.this, R.raw.button31);
 
-        playBtn.setOnClickListener(new View.OnClickListener(){
+        playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sound.start();
                 EditText edText = (EditText) findViewById(R.id.name);
                 edText.setInputType(InputType.TYPE_CLASS_TEXT);
                 playerName = edText.getText().toString();
-                if(playerName.isEmpty()){
+                if (playerName.isEmpty()) {
                     playerName = "Guest";
                 }
 
-                Intent intent = new Intent(getApplicationContext(),MenuUI.class);
+                Intent intent = new Intent(getApplicationContext(), MenuUI.class);
 
                 startActivity(intent);
 

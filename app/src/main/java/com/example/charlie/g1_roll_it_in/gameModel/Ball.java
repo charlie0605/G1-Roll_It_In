@@ -154,16 +154,6 @@ public class Ball extends RoundObject {
         checkBallOutLeftRight();
     }
 
-    public void update(int score) {
-        super.update();
-        if (score < 10) {
-            checkScreenCollisionLeftRight();
-        }
-
-        checkBallOutTopBottom();
-        checkBallOutLeftRight();
-    }
-
     /**
      * Checks if ball is out from the top or the bottom screen
      *

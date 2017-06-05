@@ -11,20 +11,9 @@
         android:id="@+id/table_score"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:stretchColumns="*"
         android:layout_centerHorizontal="true"
         android:layout_centerInParent="true"
-        android:layout_centerVertical="true">
-    </TableLayout>
-
-    <!--<TextView-->
-    <!--android:id="@+id/lbText"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_centerHorizontal="true"-->
-    <!--android:layout_centerVertical="true"-->
-    <!--android:text="Leaderboard"-->
-    <!--android:textAlignment="textStart"-->
-    <!--android:textStyle="bold" />-->
+        android:layout_centerVertical="true"
+        android:stretchColumns="*"></TableLayout>
 
 </RelativeLayout>
