@@ -9,9 +9,6 @@ import com.example.charlie.g1_roll_it_in.gameUI.GameView;
  */
 
 public class Goal extends RoundObject {
-    //variables-------------------------------------------------------------------------------------
-    private boolean updatedSpeed = false;
-    //----------------------------------------------------------------------------------------------
 
     //constructor-----------------------------------------------------------------------------------
     public Goal(int x, int y, float radius) {

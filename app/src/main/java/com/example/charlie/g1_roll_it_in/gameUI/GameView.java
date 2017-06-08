@@ -124,7 +124,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         pause = false;
         pauseRect = new Rect(width * 9 / 10, 0, width, width / 10);
         paint = new TextPaint();
-        player.setScore(24);
+//        player.setScore(24);
 
         File dir = new File(path);
         if (!dir.exists()) {
@@ -286,20 +286,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 if (!bars.isEmpty() && player.getScore() == 25 && player.getScore() >= 20) {
                     if (bars.get(0).getWidth() != width / 4) {
                         bars.get(0).setWidth(width / 4);
-
-//                        bars.clear();
-//                        bars.add(new Bar(0,height/3,width/4,width/30));
-//                        bars.get(0).setSpeedX(width/100);
                     }
                 }
-
-
-//                if(bars.isEmpty() && player.getScore() ==25){
-//
-//                    bars.add(new Bar(0,height/3,width/4,width/30));
-//                    bars.get(0).setSpeedX(width/100);
-//                }
-
 
                 for (Bar bar : bars) {
                     bar.update();
@@ -471,7 +459,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             float radiusDiff = goal.getRadius() - ball.getRadius() + delta;
 
             //checks the difference in radius of the ball and goal objects
-            if (xDiff <= radiusDiff * 10 && yDiff <= radiusDiff * 10) {//goal
+            if (xDiff <= radiusDiff && yDiff <= radiusDiff) {//goal
                 //            ball = null;
                 balls.remove(ball);
                 if (balls.isEmpty()) {
@@ -539,10 +527,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                 playerInfo = player.getName() + " " + player.getHighScore() + "\n";
                 fo.write(playerInfo.getBytes());
             }
-//            for(Map.Entry<String, Player> entry: playersMap.entrySet()) {
-//                playerInfo = entry.getKey() + " " + entry.getValue().getHighScore() + "\n";
-//                fo.write(playerInfo.toString().getBytes());
-//            }
 
             fo.close();
         } catch (IOException e) {
