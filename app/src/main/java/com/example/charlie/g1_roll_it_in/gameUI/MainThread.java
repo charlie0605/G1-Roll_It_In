@@ -80,24 +80,8 @@ public class MainThread extends Thread {
     //----------------------------------------------------------------------------------------------
 
     //getters and setters---------------------------------------------------------------------------
-    public GameView getGameView() {
-        return gameView;
-    }
-
-    public void setGameView(GameView gameView) {
-        this.gameView = gameView;
-    }
-
-    public boolean isRunning() {
-        return running;
-    }
-
     public void setRunning(boolean running) {
         this.running = running;
-    }
-
-    public Canvas getCanvas() {
-        return canvas;
     }
     //----------------------------------------------------------------------------------------------
 }
