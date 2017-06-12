@@ -1,6 +1,6 @@
 # Roll It In
 
-This is an android game application.
+This is an android game application for our SDP project.
 
 ## Getting Started
 
@@ -38,3 +38,7 @@ We use unit testing as the automated tests for this application. The tests are i
 * **Charlie Wang**
 * **Raiden Zhang**
 * **Thong Teav**
+
+## Version
+
+Version 1.0
