@@ -1,11 +1,7 @@
 package com.example.charlie.g1_roll_it_in.gameModel;
 
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.drawable.shapes.RoundRectShape;
-import android.support.constraint.solver.widgets.Rectangle;
+import android.graphics.Rect;;
 
 import com.example.charlie.g1_roll_it_in.gameUI.GameView;
 
@@ -39,7 +35,6 @@ public class Ball extends RoundObject {
     //----------------------------------------------------------------------------------------------
 
     //accessors and mutators------------------------------------------------------------------------
-
     /**
      * Return true if ball is out of the screen and false if otherwise
      *
@@ -107,13 +102,11 @@ public class Ball extends RoundObject {
     public void setBounceBottom(boolean bounceBottom) {
         this.bounceBottom = bounceBottom;
     }
-
     //----------------------------------------------------------------------------------------------
 
     //helper methods--------------------------------------------------------------------------------
-
     /**
-     * Returns a random color using different rgb values
+     * Returns a random color from a list of pre-selected colors
      *
      * @return an integer representing the value of the color
      */
@@ -130,13 +123,8 @@ public class Ball extends RoundObject {
                 Color.argb(255, 255, 96, 64), //tomato
                 Color.argb(255, 255, 255, 0) //yellow
         };
-        int red = rand.nextInt(256);
-        int green = rand.nextInt(256);
-        int blue = rand.nextInt(256);
-//        return Color.argb(255, red, green, blue);
         return colors[rand.nextInt(colors.length)];
     }
-
 
     /**
      * This method is repeatedly called and check whether the ball leaves the game screen
@@ -144,10 +132,6 @@ public class Ball extends RoundObject {
     @Override
     public void update() {
         super.update();
-
-        //will check for collision with the bars instead later on
-//        checkScreenCollisionLeftRight();
-//        checkScreenCollisionTopBottom();
 
         //check if ball is out
         checkBallOutTopBottom();

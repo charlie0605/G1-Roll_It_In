@@ -31,10 +31,6 @@
             android:name=".gameUI.InstructionUI"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.CustomTheme" />
-        <activity
-            android:name=".gameUI.GameOverMenu"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.CustomTheme"/>
     </application>
 
 </manifest>

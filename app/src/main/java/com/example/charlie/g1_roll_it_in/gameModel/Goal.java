@@ -19,13 +19,17 @@ public class Goal extends RoundObject {
 
     //helper methods--------------------------------------------------------------------------------
     @Override
+    /**
+     * moving the position of the goal
+     */
     public void update() {
         //goal will only move horizontally, so no need to update y
         x += speedX;
 
         //check if the goal reaches the edge horizontally
         if (x <= radius || x >= GameView.width - radius) {
-            speedX *= -1;
+            speedX *= -1; //change the direction goal is moving
+            //if the goal is going out the screen, set the position to the edge of the screen
             if (x < radius) {
                 x = (int) radius;
             }
