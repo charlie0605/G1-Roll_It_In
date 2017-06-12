@@ -3,12 +3,12 @@ package com.example.charlie.g1_roll_it_in;
 import android.graphics.Color;
 
 import com.example.charlie.g1_roll_it_in.gameModel.Ball;
+import com.example.charlie.g1_roll_it_in.gameUI.GameView;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-
 
 public class BallUnitTest {
     Ball ball;
@@ -16,6 +16,7 @@ public class BallUnitTest {
     @Before
     public void setUp() throws Exception {
         ball = new Ball(0, 0, 50, Color.BLACK);
+        GameView.width = 1080;
     }
 
     @Test
@@ -35,10 +36,10 @@ public class BallUnitTest {
     @Test
     public void testBallSpeed(){
         ball.setSpeed(100, 300);
-        assertEquals("Speed should be around 100", 100, Math.sqrt(ball.getSpeedX() * ball.getSpeedX() + ball.getSpeedY() * ball.getSpeedY()), 0.1f);
+        assertEquals("Speed should be around width/14", GameView.width  /14, Math.sqrt(ball.getSpeedX() * ball.getSpeedX() + ball.getSpeedY() * ball.getSpeedY()), 0.1f);
 
         ball.setSpeed(500, 125);
-        assertEquals("Speed should be around 100", 100, Math.sqrt(ball.getSpeedX() * ball.getSpeedX() + ball.getSpeedY() * ball.getSpeedY()), 0.1f);
+        assertEquals("Speed should be around width/14", GameView.width  /14, Math.sqrt(ball.getSpeedX() * ball.getSpeedX() + ball.getSpeedY() * ball.getSpeedY()), 0.1f);
 
     }
 }
