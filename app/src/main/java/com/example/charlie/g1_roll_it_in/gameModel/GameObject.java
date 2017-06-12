@@ -1,6 +1,7 @@
 package com.example.charlie.g1_roll_it_in.gameModel;
 
 import android.graphics.Canvas;
+
 import java.util.ArrayList;
 
 /**
@@ -12,7 +13,7 @@ public abstract class GameObject {
     protected float speedX, speedY;
 
     //constructor-----------------------------------------------------------------------------------
-    public GameObject(float x, float y){
+    public GameObject(float x, float y) {
         this.x = x;
         this.y = y;
 
@@ -26,12 +27,13 @@ public abstract class GameObject {
 
     /**
      * Not yet implemented
+     *
      * @param gameObjects
      * @return
      */
-    public boolean checkObjCollision(ArrayList<GameObject> gameObjects){
-        for(GameObject gameObj: gameObjects){
-            if(gameObj.equals(this)){
+    public boolean checkObjCollision(ArrayList<GameObject> gameObjects) {
+        for (GameObject gameObj : gameObjects) {
+            if (gameObj.equals(this)) {
                 continue;
             }
             //check for the collision between objects
@@ -53,7 +55,7 @@ public abstract class GameObject {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 
@@ -76,6 +78,7 @@ public abstract class GameObject {
 
     //abstract methods to be implemented by subclasses----------------------------------------------
     abstract public void update();
+
     abstract public void draw(Canvas canvas);
     //----------------------------------------------------------------------------------------------
 }

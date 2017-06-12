@@ -45,7 +45,7 @@ public class GameUI extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        if(!music.isPlaying() && musicBtn.isChecked()) {
+        if (!music.isPlaying() && musicBtn.isChecked()) {
             music.start();
         }
     }

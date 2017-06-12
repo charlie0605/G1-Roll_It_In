@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black_overlay"
-    >
+    android:orientation="vertical">
 
     <Button
         android:id="@+id/restartBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="17dp"
-        android:text="Restart"
         android:layout_above="@+id/menuBtn"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="17dp"
+        android:text="Restart" />
 
     <Button
         android:id="@+id/menuBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Menu"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/restartBtn"
-        android:layout_marginBottom="41dp" />
+        android:layout_marginBottom="41dp"
+        android:text="Menu" />
 </RelativeLayout>

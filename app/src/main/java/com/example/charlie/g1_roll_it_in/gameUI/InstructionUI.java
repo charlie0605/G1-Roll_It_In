@@ -12,7 +12,7 @@ import com.example.charlie.g1_roll_it_in.R;
 
 public class InstructionUI extends Activity {
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.instruction);
@@ -23,7 +23,6 @@ public class InstructionUI extends Activity {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int)(width*.8),(int)(height*.6));
-
+        getWindow().setLayout((int) (width * .8), (int) (height * .6));
     }
 }

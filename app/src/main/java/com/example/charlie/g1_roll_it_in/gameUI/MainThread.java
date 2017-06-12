@@ -7,7 +7,7 @@ import android.view.SurfaceHolder;
  * Created by Thong on 8/04/2017.
  */
 
-public class MainThread extends Thread{
+public class MainThread extends Thread {
     //variables-------------------------------------------------------------------------------------
     public static final int MAX_FPS = 30;
     private double averageFPS;
@@ -18,7 +18,7 @@ public class MainThread extends Thread{
     //----------------------------------------------------------------------------------------------
 
     //constructor-----------------------------------------------------------------------------------
-    public MainThread(SurfaceHolder surfaceHolder, GameView gameView){
+    public MainThread(SurfaceHolder surfaceHolder, GameView gameView) {
         super();
         this.surfaceHolder = surfaceHolder;
         this.gameView = gameView;
@@ -27,53 +27,49 @@ public class MainThread extends Thread{
 
     //other methods---------------------------------------------------------------------------------
     @Override
-    public void run(){
+    public void run() {
 
         long startTime;
-        long timeMillis = 1000/MAX_FPS;
+        long timeMillis = 1000 / MAX_FPS;
         long waitTime;
         int frameCount = 0;
         long totalTime = 0;
-        long targetTime = 1000/MAX_FPS;
+        long targetTime = 1000 / MAX_FPS;
 
-        while(running){
+        while (running) {
             startTime = System.nanoTime();
             canvas = null;
 
-            try{
+            try {
                 canvas = this.surfaceHolder.lockCanvas();
-                synchronized (surfaceHolder){
+                synchronized (surfaceHolder) {
                     this.gameView.update();
                     this.gameView.draw(canvas);
                 }
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
-            }
-            finally{
-                if(canvas != null){
-                    try{
+            } finally {
+                if (canvas != null) {
+                    try {
                         surfaceHolder.unlockCanvasAndPost(canvas);
-                    }
-                    catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             }
             timeMillis = (System.nanoTime() - startTime) / 1000000;
             waitTime = targetTime - timeMillis;
-            try{
-                if(waitTime > 0){
+            try {
+                if (waitTime > 0) {
                     this.sleep(waitTime);
                 }
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             totalTime += System.nanoTime() - startTime;
             frameCount++;
-            if(frameCount == MAX_FPS){
-                averageFPS = 1000/ ((totalTime/frameCount) / 1000000);
+            if (frameCount == MAX_FPS) {
+                averageFPS = 1000 / ((totalTime / frameCount) / 1000000);
                 frameCount = 0;
                 totalTime = 0;
                 System.out.println(averageFPS);
@@ -100,7 +96,7 @@ public class MainThread extends Thread{
         this.running = running;
     }
 
-    public Canvas getCanvas(){
+    public Canvas getCanvas() {
         return canvas;
     }
     //----------------------------------------------------------------------------------------------

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/name"
@@ -16,19 +17,15 @@
     <Button
         android:id="@+id/continueBtn"
         android:layout_width="150dp"
-
-        android:textColor="#FFFFFF"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="33dp"
         android:background="@drawable/buttonshape"
         android:shadowColor="#A8A8A8"
-        android:shadowDx="20"
-        android:shadowDy="5"
         android:shadowRadius="5"
-
-        android:layout_height="wrap_content"
-        android:layout_marginTop="33dp"
         android:text="Continue"
-        android:layout_below="@+id/name"
-        android:layout_centerHorizontal="true"/>
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:id="@+id/description"

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black_overlay"
+    android:background="#e6e6e6"
     android:orientation="vertical">
 
     <TextView
@@ -14,5 +14,6 @@
         android:layout_centerVertical="true"
         android:text="The aim of this game is to swipe the ball up and score\nThe goal will start moving after the 10th goal\nTry to stay alive as long as possible\nHave fun"
         android:textAlignment="center"
+        android:textColor="#FFFF4081"
         android:textStyle="bold" />
 </RelativeLayout>
